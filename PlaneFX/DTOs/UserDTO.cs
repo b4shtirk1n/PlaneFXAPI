@@ -13,7 +13,6 @@ namespace PlaneFX.DTOs
 		public required string TgId { get; set; }
 
 		[Required]
-		[StringLength(3)]
 		public required int TimeZone { get; set; }
 	}
 }
