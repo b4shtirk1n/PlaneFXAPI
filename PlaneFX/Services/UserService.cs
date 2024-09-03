@@ -11,7 +11,7 @@ namespace PlaneFX.Services
 		public async Task<User?> GetById(long id)
 			=> await context.Users.FindAsync(id);
 
-		public async Task<User?> GetByTg(string tgId)
+		public async Task<User?> GetByTg(long tgId)
 			=> await context.Users.FirstOrDefaultAsync(u => u.TgId == tgId);
 
 		public async Task<User?> GetByToken(string token)
@@ -26,7 +26,7 @@ namespace PlaneFX.Services
 		public async Task<IEnumerable<User>> GetAllByRole(RoleEnum role)
 			=> await context.Users.Where(u => u.Role == (int)role).ToListAsync();
 
-		public async Task<bool> IsExist(string tgId)
+		public async Task<bool> IsExist(long tgId)
 			=> await context.Users.AnyAsync(u => u.TgId == tgId);
 
 		public async Task<User> Add(UserDTO dTO)
@@ -35,7 +35,7 @@ namespace PlaneFX.Services
 			{
 				Username = dTO.Username,
 				TgId = dTO.TgId,
-				Token = SecurityHelper.GenerateToken(dTO.TgId),
+				Token = SecurityHelper.GenerateToken($"{dTO.TgId}"),
 				Role = (int)RoleEnum.Client,
 				Timezone = dTO.TimeZone
 			});

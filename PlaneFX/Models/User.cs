@@ -18,8 +18,7 @@ public partial class User
     public string Username { get; set; } = null!;
 
     [Column("tg_id")]
-    [StringLength(255)]
-    public string TgId { get; set; } = null!;
+    public long TgId { get; set; }
 
     [Column("token")]
     public string Token { get; set; } = null!;

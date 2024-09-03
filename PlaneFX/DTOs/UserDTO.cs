@@ -9,8 +9,7 @@ namespace PlaneFX.DTOs
 		public required string Username { get; set; }
 
 		[Required]
-		[StringLength(10)]
-		public required string TgId { get; set; }
+		public required long TgId { get; set; }
 
 		[Required]
 		public required int TimeZone { get; set; }

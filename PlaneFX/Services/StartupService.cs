@@ -12,25 +12,23 @@ namespace PlaneFX.Services
 
 		public async Task MakeSU()
 		{
-			string? id = configuration[TG_ID];
+			long? id = Convert.ToInt64(configuration[TG_ID]);
 			string? username = configuration[TG_USERNAME];
-			string? timeZone = configuration[TIME_ZONE];
+			int? timeZone = Convert.ToInt32(configuration[TIME_ZONE]);
 
-			if (string.IsNullOrEmpty(id)
-				|| string.IsNullOrEmpty(username)
-				|| string.IsNullOrEmpty(timeZone))
+			if (id == null || timeZone == null || string.IsNullOrEmpty(username))
 				throw new NullReferenceException("do enter SA user in config!");
 
 			foreach (User user in await userService.GetAllByRole(RoleEnum.SU))
 				await userService.ChangeRole(user, RoleEnum.Admin);
 
-			if (await userService.GetByTg(id) is not User sa)
+			if (await userService.GetByTg((long)id) is not User sa)
 			{
 				sa = await userService.Add(new UserDTO
 				{
-					TgId = id,
+					TgId = (long)id,
 					Username = username,
-					TimeZone = int.Parse(timeZone)
+					TimeZone = (int)timeZone
 				});
 			}
 			await userService.ChangeRole(sa, RoleEnum.SU);
