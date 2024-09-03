@@ -39,7 +39,7 @@ public partial class User
     public long? Parent { get; set; }
 
     [Column("timezone")]
-    public string Timezone { get; set; } = null!;
+    public int? Timezone { get; set; }
 
     [InverseProperty("UserNavigation")]
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
