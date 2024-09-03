@@ -30,7 +30,7 @@ namespace PlaneFX.Services
 				{
 					TgId = id,
 					Username = username,
-					TimeZone = timeZone
+					TimeZone = int.Parse(timeZone)
 				});
 			}
 			await userService.ChangeRole(sa, RoleEnum.SU);
