@@ -14,6 +14,6 @@ namespace PlaneFX.DTOs
 
 		[Required]
 		[StringLength(3)]
-		public required string TimeZone { get; set; }
+		public required int TimeZone { get; set; }
 	}
 }
