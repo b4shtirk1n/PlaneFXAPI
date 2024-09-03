@@ -72,7 +72,6 @@ else
 		// o.WithOrigins("https://planefx.cloud/", "https://www.planefx.cloud/");
 		o.AllowAnyHeader();
 		o.AllowAnyMethod();
-		o.AllowCredentials();
 	});
 }
 app.UseMiddleware<DbConnectionMiddleware>();
