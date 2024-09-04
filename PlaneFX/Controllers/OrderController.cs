@@ -11,7 +11,7 @@ namespace PlaneFX.Controllers
     [Produces("application/json")]
     public class OrderController(OrderService orderService, AccountService accountService) : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("{account}")]
         public async Task<ActionResult<OrderResponse>> Get(long account)
             => Ok(await orderService.GetOrders(account));
 
