@@ -7,17 +7,30 @@ namespace PlaneFX.Services
 	public class AccountService(PlaneFXContext context)
 	{
 		public async Task<Account?> GetById(long id)
-		  	=> await context.Accounts.FindAsync(id);
+		{
+			if (await context.Accounts.FindAsync(id) is not Account account)
+				return null;
+
+			account.CountOrders = await context.OpenedOrders.CountAsync(o => o.Account == id);
+			return account;
+		}
 
 		public async Task<Account?> GetByNumber(long number)
-		  => await context.Accounts.FirstOrDefaultAsync(a => a.Number == number);
+		{
+			if (await context.Accounts.FirstOrDefaultAsync(a => a.Number == number)
+				is not Account account)
+				return null;
+
+			account.CountOrders = await context.OpenedOrders.CountAsync(o => o.Account == account.Id);
+			return account;
+		}
 
 		public async Task<IEnumerable<Account>> GetByUser(long id)
 		{
 			var accounts = await context.Accounts.Where(a => a.User == id).ToListAsync();
 
 			foreach (var account in accounts)
-				account.CountOrders = await context.OpenedOrders.CountAsync();
+				account.CountOrders = await context.OpenedOrders.CountAsync(o => o.Account == account.Id);
 
 			return accounts;
 		}
