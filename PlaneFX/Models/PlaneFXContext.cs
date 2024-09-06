@@ -127,7 +127,6 @@ public partial class PlaneFXContext : DbContext
             entity.HasKey(e => e.Id).HasName("user_pkey");
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
-            entity.Property(e => e.Timezone).HasDefaultValueSql("'0'::text");
 
             entity.HasOne(d => d.ParentNavigation).WithMany(p => p.InverseParentNavigation).HasConstraintName("user_fk7");
 
