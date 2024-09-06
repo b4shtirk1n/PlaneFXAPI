@@ -13,7 +13,14 @@ namespace PlaneFX.Services
 		  => await context.Accounts.FirstOrDefaultAsync(a => a.Number == number);
 
 		public async Task<IEnumerable<Account>> GetByUser(long id)
-		  	=> await context.Accounts.Where(a => a.User == id).ToListAsync();
+		{
+			var accounts = await context.Accounts.Where(a => a.User == id).ToListAsync();
+
+			foreach (var account in accounts)
+				account.CountOrders = await context.OpenedOrders.CountAsync();
+
+			return accounts;
+		}
 
 		public async Task<bool> IsExist(AccountDTO dTO)
 		  	=> await context.Accounts.AnyAsync(a => a.Name == dTO.Name && a.User == dTO.User);
