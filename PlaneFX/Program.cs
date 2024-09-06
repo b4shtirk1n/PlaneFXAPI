@@ -68,8 +68,7 @@ else
 {
 	app.UseCors(o =>
 	{
-		o.AllowAnyOrigin();
-		// o.WithOrigins("https://planefx.cloud/", "https://www.planefx.cloud/");
+		o.WithOrigins("https://planefx.cloud/", "https://www.planefx.cloud/");
 		o.AllowAnyHeader();
 		o.AllowAnyMethod();
 	});
