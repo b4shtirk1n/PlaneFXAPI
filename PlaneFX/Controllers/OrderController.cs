@@ -13,7 +13,7 @@ namespace PlaneFX.Controllers
     {
         [HttpGet("{account}")]
         public async Task<ActionResult<OrderResponse>> Get(long account)
-            => Ok(await orderService.GetOrders(account));
+            => Ok(await orderService.Get(account));
 
         [HttpGet("GetOpen/{account}")]
         public async Task<ActionResult<List<OpenedOrder>>> GetOpened(long account)

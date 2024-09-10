@@ -20,7 +20,7 @@ namespace PlaneFX.Controllers
 
 			return user!.Role switch
 			{
-				(int)RoleEnum.SU => Ok(await userService.GetAll()),
+				(int)RoleEnum.SU => Ok(await userService.Get()),
 				(int)RoleEnum.Admin => Ok(await userService.GetAllFromAdmin()),
 				_ => BadRequest(),
 			};
