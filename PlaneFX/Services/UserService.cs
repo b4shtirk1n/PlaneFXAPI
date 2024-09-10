@@ -17,7 +17,7 @@ namespace PlaneFX.Services
 		public async Task<User?> GetByToken(string token)
 			=> await context.Users.FirstOrDefaultAsync(u => u.Token == token);
 
-		public async Task<IEnumerable<User>> GetAll()
+		public async Task<IEnumerable<User>> Get()
 			=> await context.Users.ToListAsync();
 
 		public async Task<IEnumerable<User>> GetAllFromAdmin()

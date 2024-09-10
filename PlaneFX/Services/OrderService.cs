@@ -7,7 +7,7 @@ namespace PlaneFX.Services
 {
     public class OrderService(PlaneFXContext context)
     {
-        public async Task<OrderResponse> GetOrders(long account)
+        public async Task<OrderResponse> Get(long account)
             => new(await GetOpenOrders(account), await GetCloseOrders(account));
 
         public async Task<IEnumerable<OpenedOrder>> GetOpenOrders(long account)
