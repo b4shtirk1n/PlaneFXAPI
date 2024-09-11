@@ -12,5 +12,9 @@ namespace PlaneFX.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Subscription>>> Get()
             => Ok(await subscribeService.Get());
+
+        [HttpPost("Checkout")]
+        public async Task<ActionResult<string>> CreateInvoice(Invoice invoice)
+            => Ok(await subscribeService.CreateInvoice(invoice));
     }
 }
