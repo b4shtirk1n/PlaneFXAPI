@@ -6,17 +6,20 @@ namespace PlaneFX.Services
 {
 	public class StartupService(IConfiguration configuration, UserService userService)
 	{
-		private const string TG_ID = "TG_ID";
-		private const string TG_USERNAME = "TG_USERNAME";
-		private const string TIME_ZONE = "TIME_ZONE";
+		public const string TG_ID = "TG_ID";
+		public const string TG_USERNAME = "TG_USERNAME";
+		public const string TIME_ZONE = "TIME_ZONE";
+		public const string TOKEN = "TOKEN";
 
 		public async Task MakeSU()
 		{
 			long? id = Convert.ToInt64(configuration[TG_ID]);
 			string? username = configuration[TG_USERNAME];
 			int? timeZone = Convert.ToInt32(configuration[TIME_ZONE]);
+			string? token = configuration[TOKEN];
 
-			if (id == null || timeZone == null || string.IsNullOrEmpty(username))
+			if (id == null || string.IsNullOrEmpty(username)
+				|| timeZone == null || string.IsNullOrEmpty(token))
 				throw new NullReferenceException("do enter SA user in config!");
 
 			foreach (User user in await userService.GetAllByRole(RoleEnum.SU))
