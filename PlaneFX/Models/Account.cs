@@ -28,31 +28,31 @@ public partial class Account
     public bool IsCent { get; set; }
 
     [Column("profit")]
-    [Precision(10, 5)]
+    [Precision(10, 2)]
     public decimal Profit { get; set; }
 
     [Column("profit_today")]
-    [Precision(10, 5)]
+    [Precision(10, 2)]
     public decimal ProfitToday { get; set; }
 
     [Column("profit_yesterday")]
-    [Precision(10, 5)]
+    [Precision(10, 2)]
     public decimal ProfitYesterday { get; set; }
 
     [Column("profit_week")]
-    [Precision(10, 5)]
+    [Precision(10, 2)]
     public decimal ProfitWeek { get; set; }
 
     [Column("drawdown")]
-    [Precision(10, 5)]
+    [Precision(10, 2)]
     public decimal Drawdown { get; set; }
 
     [Column("margin_level")]
-    [Precision(10, 5)]
+    [Precision(10, 2)]
     public decimal MarginLevel { get; set; }
 
     [Column("balance")]
-    [Precision(10, 5)]
+    [Precision(10, 2)]
     public decimal Balance { get; set; }
 
     [InverseProperty("AccountNavigation")]
