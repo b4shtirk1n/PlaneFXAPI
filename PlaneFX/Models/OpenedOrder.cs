@@ -23,7 +23,7 @@ public partial class OpenedOrder
     [Precision(10, 5)]
     public decimal Volume { get; set; }
 
-    [Column("time_opened", TypeName = "timestamp without time zone")]
+    [Column("time_opened")]
     public DateTime TimeOpened { get; set; }
 
     [Column("price_opened")]
@@ -50,7 +50,7 @@ public partial class OpenedOrder
     [Precision(10, 5)]
     public decimal Profit { get; set; }
 
-    [Column("time_update", TypeName = "timestamp without time zone")]
+    [Column("time_update")]
     public DateTime TimeUpdate { get; set; }
 
     [Column("symbol")]

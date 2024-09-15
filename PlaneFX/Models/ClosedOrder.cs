@@ -23,10 +23,10 @@ public partial class ClosedOrder
     [Precision(10, 5)]
     public decimal Volume { get; set; }
 
-    [Column("time_opened", TypeName = "timestamp without time zone")]
+    [Column("time_opened")]
     public DateTime TimeOpened { get; set; }
 
-    [Column("time_closed", TypeName = "timestamp without time zone")]
+    [Column("time_closed")]
     public DateTime TimeClosed { get; set; }
 
     [Column("price_opened")]
