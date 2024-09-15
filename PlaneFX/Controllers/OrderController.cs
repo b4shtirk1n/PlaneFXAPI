@@ -11,27 +11,27 @@ namespace PlaneFX.Controllers
     [Produces("application/json")]
     public class OrderController(OrderService orderService, AccountService accountService) : ControllerBase
     {
-        [HttpGet("{account}")]
-        public async Task<ActionResult<OrderResponse>> Get(long account)
-            => Ok(await orderService.Get(account));
+        [HttpGet("{id}")]
+        public async Task<ActionResult<OrderResponse>> Get(long id)
+            => Ok(await orderService.Get(id));
 
-        [HttpGet("GetOpen/{account}")]
-        public async Task<ActionResult<List<OpenedOrder>>> GetOpened(long account)
-            => Ok(await orderService.GetOpenOrders(account));
+        [HttpGet("GetOpen/{id}")]
+        public async Task<ActionResult<List<OpenedOrder>>> GetOpened(long id)
+            => Ok(await orderService.GetOpenOrders(id));
 
-        [HttpGet("GetClose/{account}")]
-        public async Task<ActionResult<List<OpenedOrder>>> GetClosed(long account)
-            => Ok(await orderService.GetCloseOrders(account));
+        [HttpGet("GetClose/{id}")]
+        public async Task<ActionResult<List<OpenedOrder>>> GetClosed(long id)
+            => Ok(await orderService.GetCloseOrders(id));
 
         [HttpPost]
         public async Task<IActionResult> Update(OrderDTO dTO)
         {
-            if (await accountService.GetByNumber(dTO.AccountNumber) is not Account account)
+            if (await accountService.GetByNumber(dTO.AccountNumber) is not AccountResponse account)
                 return BadRequest();
 
             try
             {
-                await orderService.Process(dTO, account.Id);
+                await orderService.Process(dTO, account.Account.Id);
                 return Ok();
             }
             catch
