@@ -7,45 +7,45 @@ namespace PlaneFX.Services
 {
     public class OrderService(PlaneFXContext context)
     {
-        public async Task<OrderResponse> Get(long account)
-            => new(await GetOpenOrders(account), await GetCloseOrders(account));
+        public async Task<OrderResponse> Get(long id)
+            => new(await GetOpenOrders(id), await GetCloseOrders(id));
 
-        public async Task<IEnumerable<OpenedOrder>> GetOpenOrders(long account)
-            => await context.OpenedOrders.Where(o => o.Account == account).ToListAsync();
+        public async Task<IEnumerable<OpenedOrder>> GetOpenOrders(long id)
+            => await context.OpenedOrders.Where(o => o.Account == id).ToListAsync();
 
-        public async Task<IEnumerable<ClosedOrder>> GetCloseOrders(long account)
-            => await context.ClosedOrders.Where(o => o.Account == account).ToListAsync();
+        public async Task<IEnumerable<ClosedOrder>> GetCloseOrders(long id)
+            => await context.ClosedOrders.Where(o => o.Account == id).ToListAsync();
 
-        public async Task<bool> OrderExist(long order)
-            => await context.OpenedOrders.AnyAsync(o => o.Order == order)
-                || await context.ClosedOrders.AnyAsync(o => o.Order == order);
+        public async Task<bool> OrderExist(long orderId)
+            => await context.OpenedOrders.AnyAsync(o => o.Order == orderId)
+                || await context.ClosedOrders.AnyAsync(o => o.Order == orderId);
 
-        public async Task Process(OrderDTO dTO, long account)
+        public async Task Process(OrderDTO dTO, long accountId)
         {
             foreach (var openOrderDTO in dTO.OpenedOrders)
                 if (await context.OpenedOrders.FirstOrDefaultAsync(o => o.Order == openOrderDTO.Order)
                     is OpenedOrder openOrder)
                     Update(openOrder, openOrderDTO);
                 else
-                    await CreateOpen(openOrderDTO, account);
+                    await CreateOpen(openOrderDTO, accountId);
 
             foreach (var closeOrderDTO in dTO.ClosedOrders)
                 if (await context.OpenedOrders.FirstOrDefaultAsync(o => o.Order == closeOrderDTO.Order)
                     is OpenedOrder openOrder)
                 {
                     Close(openOrder);
-                    await CreateClose(closeOrderDTO, account);
+                    await CreateClose(closeOrderDTO, accountId);
                 }
                 else
-                    await CreateClose(closeOrderDTO, account);
+                    await CreateClose(closeOrderDTO, accountId);
 
             await context.SaveChangesAsync();
         }
 
-        private async Task CreateOpen(OpenedOrderDTO dTO, long account)
+        private async Task CreateOpen(OpenedOrderDTO dTO, long accountId)
             => await context.OpenedOrders.AddAsync(new()
             {
-                Account = account,
+                Account = accountId,
                 Order = dTO.Order,
                 Volume = dTO.Volume,
                 TimeOpened = DateTimeOffset.FromUnixTimeSeconds(dTO.TimeOpened).UtcDateTime,
@@ -59,10 +59,10 @@ namespace PlaneFX.Services
                 TimeUpdate = DateTimeOffset.FromUnixTimeSeconds(dTO.TimeUpdate).UtcDateTime,
             });
 
-        private async Task CreateClose(ClosedOrderDTO dTO, long account)
+        private async Task CreateClose(ClosedOrderDTO dTO, long accountId)
             => await context.ClosedOrders.AddAsync(new()
             {
-                Account = account,
+                Account = accountId,
                 Order = dTO.Order,
                 Volume = dTO.Volume,
                 TimeOpened = DateTimeOffset.FromUnixTimeSeconds(dTO.TimeClosed).UtcDateTime,
