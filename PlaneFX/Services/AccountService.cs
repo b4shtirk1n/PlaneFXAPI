@@ -13,9 +13,7 @@ namespace PlaneFX.Services
 				return null;
 
 			int countOrders = await context.OpenedOrders.CountAsync(o => o.Account == id);
-			AccountResponse res = (AccountResponse)account;
-			res.CountOrders = countOrders;
-			return res;
+			return new(account, countOrders);
 		}
 
 		public async Task<AccountResponse?> GetByNumber(long number)
@@ -25,9 +23,7 @@ namespace PlaneFX.Services
 				return null;
 
 			int countOrders = await context.OpenedOrders.CountAsync(o => o.Account == account.Id);
-			AccountResponse res = (AccountResponse)account;
-			res.CountOrders = countOrders;
-			return res;
+			return new(account, countOrders);
 		}
 
 		public async Task<IEnumerable<AccountResponse>> GetByUser(long id)
@@ -38,9 +34,7 @@ namespace PlaneFX.Services
 			foreach (var account in accounts)
 			{
 				int countOrders = await context.OpenedOrders.CountAsync(o => o.Account == account.Id);
-				AccountResponse newAccount = (AccountResponse)account;
-				newAccount.CountOrders = countOrders;
-				res.Add(newAccount);
+				res.Add(new(account, countOrders));
 			}
 			return res;
 		}
