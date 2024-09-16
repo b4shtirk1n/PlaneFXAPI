@@ -51,5 +51,22 @@ namespace PlaneFX.Services
 			await context.SaveChangesAsync();
 			return account.Entity;
 		}
+
+		public async Task<Account?> Update(OrderDTO dTO)
+		{
+			if (await context.Accounts.FirstOrDefaultAsync(a => a.Number == dTO.AccountNumber) is not Account account)
+				return null;
+
+			account.Balance = dTO.Balance;
+			account.Drawdown = dTO.Drawdown;
+			account.MarginLevel = dTO.MarginLevel;
+			account.Profit = dTO.Profit;
+			account.ProfitToday = dTO.ProfitToday;
+			account.ProfitWeek = dTO.ProfitWeek;
+			account.ProfitYesterday = dTO.ProfitYesterday;
+
+			await context.SaveChangesAsync();
+			return account;
+		}
 	}
 }
