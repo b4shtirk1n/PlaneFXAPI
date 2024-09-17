@@ -8,9 +8,8 @@ namespace PlaneFX.DTOs
         [Required]
         public required long Order { get; set; }
 
-        [Required]
         [StringLength(15)]
-        public required string Symbol { get; set; }
+        public string? Symbol { get; set; }
 
         [Required]
         public required decimal Volume { get; set; }
