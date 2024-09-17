@@ -25,9 +25,9 @@ namespace PlaneFX.Services
             foreach (var openOrderDTO in dTO.OpenedOrders)
                 if (await context.OpenedOrders.FirstOrDefaultAsync(o => o.Order == openOrderDTO.Order)
                     is OpenedOrder openOrder)
-                    Update(openOrder, openOrderDTO);
+                    Update(openOrder, openOrderDTO, dTO.Timestamp);
                 else
-                    await CreateOpen(openOrderDTO, accountId);
+                    await CreateOpen(openOrderDTO, accountId, dTO.Timestamp);
 
             foreach (var closeOrderDTO in dTO.ClosedOrders)
                 if (await context.OpenedOrders.FirstOrDefaultAsync(o => o.Order == closeOrderDTO.Order)
@@ -42,7 +42,7 @@ namespace PlaneFX.Services
             await context.SaveChangesAsync();
         }
 
-        private async Task CreateOpen(OpenedOrderDTO dTO, long accountId)
+        private async Task CreateOpen(OpenedOrderDTO dTO, long accountId, long timeUpdate)
             => await context.OpenedOrders.AddAsync(new()
             {
                 Account = accountId,
@@ -56,7 +56,7 @@ namespace PlaneFX.Services
                 Commissions = dTO.Commissions,
                 Profit = dTO.Profit,
                 Symbol = dTO.Symbol,
-                TimeUpdate = DateTimeOffset.FromUnixTimeSeconds(dTO.TimeUpdate).UtcDateTime,
+                TimeUpdate = DateTimeOffset.FromUnixTimeSeconds(timeUpdate).UtcDateTime,
             });
 
         private async Task CreateClose(ClosedOrderDTO dTO, long accountId)
@@ -76,7 +76,7 @@ namespace PlaneFX.Services
                 Symbol = dTO.Symbol,
             });
 
-        private static void Update(OpenedOrder openOrder, OpenedOrderDTO dTO)
+        private static void Update(OpenedOrder openOrder, OpenedOrderDTO dTO, long timeUpdate)
         {
             openOrder.Volume = dTO.Volume;
             openOrder.TimeOpened = DateTimeOffset.FromUnixTimeSeconds(dTO.TimeOpened).UtcDateTime;
@@ -87,7 +87,7 @@ namespace PlaneFX.Services
             openOrder.Commissions = dTO.Commissions;
             openOrder.Profit = dTO.Profit;
             openOrder.Symbol = dTO.Symbol;
-            openOrder.TimeUpdate = DateTimeOffset.FromUnixTimeSeconds(dTO.TimeOpened).UtcDateTime;
+            openOrder.TimeUpdate = DateTimeOffset.FromUnixTimeSeconds(timeUpdate).UtcDateTime;
         }
 
         private void Close(OpenedOrder openOrder)
