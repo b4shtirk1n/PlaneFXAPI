@@ -12,7 +12,7 @@ namespace PlaneFX.DTOs
 		public required long User { get; set; }
 
 		[Required]
-		public required string Number { get; set; }
+		public required long Number { get; set; }
 
 		[Required]
 		public required bool IsCent { get; set; }

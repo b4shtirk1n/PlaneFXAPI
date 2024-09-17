@@ -9,9 +9,6 @@ namespace PlaneFX.DTOs
         public required long Order { get; set; }
 
         [Required]
-        public required long TimeUpdate { get; set; }
-
-        [Required]
         [StringLength(15)]
         public required string Symbol { get; set; }
 
