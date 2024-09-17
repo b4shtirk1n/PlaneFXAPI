@@ -9,7 +9,11 @@ namespace PlaneFX.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class OrderController(OrderService orderService, AccountService accountService) : ControllerBase
+    public class OrderController(
+        OrderService orderService,
+        AccountService accountService,
+        UserService userService
+    ) : ControllerBase
     {
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderResponse>> Get(long id)
@@ -27,8 +31,21 @@ namespace PlaneFX.Controllers
         public async Task<IActionResult> Update(OrderDTO dTO)
         {
             if (await accountService.GetByNumber(dTO.AccountNumber) is not AccountResponse account)
-                return BadRequest();
+            {
+                if (await userService.GetByToken(dTO.Token) is not User user)
+                    return BadRequest();
 
+                await accountService.Create(new AccountDTO()
+                {
+                    User = user.Id,
+                    Name = dTO.AccountName,
+                    Number = dTO.AccountNumber,
+                    IsCent = dTO.IsCent,
+                });
+
+                account = await accountService.GetByNumber(dTO.AccountNumber!)
+                    ?? throw new NullReferenceException();
+            }
             try
             {
                 await accountService.Update(dTO);
