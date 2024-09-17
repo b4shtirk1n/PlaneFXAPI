@@ -47,6 +47,9 @@ namespace PlaneFX.Services
 			var account = await context.Accounts.AddAsync(new Account
 			{
 				Name = dTO.Name,
+				User = dTO.User,
+				Number = dTO.Number,
+				IsCent = dTO.IsCent,
 			});
 			await context.SaveChangesAsync();
 			return account.Entity;
