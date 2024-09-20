@@ -19,6 +19,10 @@ public partial class PlaneFXContext : DbContext
 
     public virtual DbSet<ClosedOrder> ClosedOrders { get; set; }
 
+    public virtual DbSet<Command> Commands { get; set; }
+
+    public virtual DbSet<CommandType> CommandTypes { get; set; }
+
     public virtual DbSet<MainBilling> MainBillings { get; set; }
 
     public virtual DbSet<OpenedOrder> OpenedOrders { get; set; }
@@ -61,6 +65,26 @@ public partial class PlaneFXContext : DbContext
             entity.HasOne(d => d.AccountNavigation).WithMany(p => p.ClosedOrders)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("closed_orders_fk1");
+        });
+
+        modelBuilder.Entity<Command>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("command_pk");
+
+            entity.Property(e => e.IsComplete).HasDefaultValue(false);
+
+            entity.HasOne(d => d.AccountNavigation).WithMany(p => p.Commands)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("command_account_id_fk");
+
+            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Commands)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("command_command_type_id_fk");
+        });
+
+        modelBuilder.Entity<CommandType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("command_type_pk");
         });
 
         modelBuilder.Entity<MainBilling>(entity =>
