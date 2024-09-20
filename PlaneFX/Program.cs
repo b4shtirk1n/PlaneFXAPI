@@ -23,6 +23,7 @@ builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<AccountService>();
 builder.Services.AddTransient<OrderService>();
 builder.Services.AddTransient<SubscribeService>();
+builder.Services.AddTransient<CommandService>();
 
 builder.Services.AddSwaggerGen(o =>
 {
