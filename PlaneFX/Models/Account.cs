@@ -59,6 +59,9 @@ public partial class Account
     public virtual ICollection<ClosedOrder> ClosedOrders { get; set; } = new List<ClosedOrder>();
 
     [InverseProperty("AccountNavigation")]
+    public virtual ICollection<Command> Commands { get; set; } = new List<Command>();
+
+    [InverseProperty("AccountNavigation")]
     public virtual ICollection<OpenedOrder> OpenedOrders { get; set; } = new List<OpenedOrder>();
 
     [ForeignKey("User")]
