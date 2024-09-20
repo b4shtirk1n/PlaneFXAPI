@@ -5,7 +5,7 @@ namespace PlaneFX.Services
 {
     public class CommandService(PlaneFXContext context)
     {
-        public async Task<List<Command>> GetUnComplete()
+        public async Task<IEnumerable<Command>> GetUnComplete()
             => await context.Commands.Where(c => !c.IsComplete).ToListAsync();
     }
 }
