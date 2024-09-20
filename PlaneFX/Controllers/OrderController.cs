@@ -12,7 +12,8 @@ namespace PlaneFX.Controllers
     public class OrderController(
         OrderService orderService,
         AccountService accountService,
-        UserService userService
+        UserService userService,
+        CommandService commandService
     ) : ControllerBase
     {
         [HttpGet("{id}")]
@@ -28,7 +29,7 @@ namespace PlaneFX.Controllers
             => Ok(await orderService.GetCloseOrders(id));
 
         [HttpPost]
-        public async Task<IActionResult> Update(OrderDTO dTO)
+        public async Task<ActionResult<List<Command>>> Update(OrderDTO dTO)
         {
             if (await accountService.GetByNumber(dTO.AccountNumber) is not AccountResponse account)
             {
@@ -50,7 +51,7 @@ namespace PlaneFX.Controllers
             {
                 await accountService.Update(dTO);
                 await orderService.Process(dTO, account.Account.Id);
-                return Ok();
+                return Ok(await commandService.GetUnComplete());
             }
             catch
             {
