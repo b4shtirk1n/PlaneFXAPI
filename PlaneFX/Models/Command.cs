@@ -19,8 +19,8 @@ public partial class Command
     [Column("order")]
     public long? Order { get; set; }
 
-    [Column("tiker")]
-    public int Tiker { get; set; }
+    [Column("ticker")]
+    public int Ticker { get; set; }
 
     [Column("type")]
     public int Type { get; set; }
