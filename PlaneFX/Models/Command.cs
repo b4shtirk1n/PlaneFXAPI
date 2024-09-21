@@ -20,7 +20,8 @@ public partial class Command
     public long? Order { get; set; }
 
     [Column("ticker")]
-    public int Ticker { get; set; }
+    [StringLength(6)]
+    public string Ticker { get; set; } = null!;
 
     [Column("type")]
     public int Type { get; set; }

@@ -57,7 +57,7 @@ public partial class ClosedOrder
     public decimal Profit { get; set; }
 
     [Column("symbol")]
-    [StringLength(15)]
+    [StringLength(6)]
     public string? Symbol { get; set; }
 
     [ForeignKey("Account")]
