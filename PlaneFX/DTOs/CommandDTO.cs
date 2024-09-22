@@ -9,8 +9,8 @@ namespace PlaneFX.DTOs
 
         public long? Order { get; set; }
 
-        [Required]
-        public required int Ticker { get; set; }
+        [StringLength(6)]
+        public string? Ticker { get; set; }
 
         [Required]
         public required int Type { get; set; }
