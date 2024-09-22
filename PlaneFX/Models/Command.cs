@@ -21,7 +21,7 @@ public partial class Command
 
     [Column("ticker")]
     [StringLength(6)]
-    public string Ticker { get; set; } = null!;
+    public string? Ticker { get; set; }
 
     [Column("type")]
     public int Type { get; set; }
