@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using PlaneFX.Filters;
@@ -29,10 +30,10 @@ builder.Services.AddSwaggerGen(o =>
 {
 	o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
 	{
-		Name = "Authorization",
+		Name = nameof(Authorization),
 		Type = SecuritySchemeType.ApiKey,
-		Scheme = "Bearer",
-		BearerFormat = "JWT",
+		Scheme = JwtBearerDefaults.AuthenticationScheme,
+		BearerFormat = nameof(System.IdentityModel.Tokens.Jwt).ToUpper(),
 		In = ParameterLocation.Header,
 		Description = "JSON Web Token based security (\"Bearer {Token}\")",
 	});
@@ -43,7 +44,7 @@ builder.Services.AddSwaggerGen(o =>
 			{
 				Reference = new OpenApiReference
 				{
-					Id = "Bearer",
+					Id = JwtBearerDefaults.AuthenticationScheme,
 					Type = ReferenceType.SecurityScheme
 				}
 			},
