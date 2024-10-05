@@ -25,5 +25,9 @@ namespace PlaneFX.Controllers
 		  	=> await accountService.IsExist(dTO)
 				? Ok(await accountService.Create(dTO))
 				: Conflict();
+
+		[HttpGet]
+		public async Task<ActionResult<bool>> IsReferral(long id)
+			=> Ok(await accountService.IsReferral(id));
 	}
 }
