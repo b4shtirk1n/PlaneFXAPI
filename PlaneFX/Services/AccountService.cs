@@ -42,6 +42,10 @@ namespace PlaneFX.Services
 		public async Task<bool> IsExist(AccountDTO dTO)
 		  	=> await context.Accounts.AnyAsync(a => a.Name == dTO.Name && a.User == dTO.User);
 
+		public async Task<bool> IsReferral(long user)
+			=> await context.UserSubscriptions.AnyAsync(uS => uS.User == user
+				&& uS.Date >= DateOnly.FromDateTime(DateTime.Now));
+
 		public async Task<Account> Create(AccountDTO dTO)
 		{
 			var account = await context.Accounts.AddAsync(new Account
