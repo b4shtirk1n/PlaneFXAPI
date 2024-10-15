@@ -20,7 +20,7 @@ namespace PlaneFX.Controllers
         public async Task<IActionResult> Complete(long id)
         {
             if (!await commandService.IsExist(id))
-                return BadRequest();
+                return NotFound();
 
             await commandService.Complete(id);
             return Ok();
