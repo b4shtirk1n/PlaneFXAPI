@@ -18,7 +18,8 @@ namespace PlaneFX.Services
 			int? timeZone = Convert.ToInt32(configuration[TIME_ZONE]);
 			string? token = configuration[TG_API_TOKEN];
 
-			if (id == null || timeZone == null || string.IsNullOrEmpty(username))
+			if (id == null || string.IsNullOrEmpty(username)
+				|| timeZone == null || string.IsNullOrEmpty(token))
 				throw new NullReferenceException("do enter SA user in config!");
 
 			foreach (User user in await userService.GetAllByRole(RoleEnum.SU))
