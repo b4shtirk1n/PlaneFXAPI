@@ -27,6 +27,8 @@ public partial class PlaneFXContext : DbContext
 
     public virtual DbSet<OpenedOrder> OpenedOrders { get; set; }
 
+    public virtual DbSet<OrderType> OrderTypes { get; set; }
+
     public virtual DbSet<ReferralBilling> ReferralBillings { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
@@ -109,6 +111,11 @@ public partial class PlaneFXContext : DbContext
             entity.HasOne(d => d.AccountNavigation).WithMany(p => p.OpenedOrders)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("opened_orders_fk1");
+        });
+
+        modelBuilder.Entity<OrderType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("order_type_pk");
         });
 
         modelBuilder.Entity<ReferralBilling>(entity =>
