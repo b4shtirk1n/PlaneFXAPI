@@ -21,6 +21,9 @@ namespace PlaneFX.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task<bool> IsExist(long id)
+            => await context.Commands.AnyAsync(c => c.Id == id);
+
         public async Task Complete(long id)
         {
             var command = await context.Commands.FindAsync(id);
