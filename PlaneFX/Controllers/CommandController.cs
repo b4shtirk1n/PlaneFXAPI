@@ -16,7 +16,7 @@ namespace PlaneFX.Controllers
             return Ok();
         }
 
-        [HttpPatch]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> Complete(long id)
         {
             await commandService.Complete(id);
