@@ -17,7 +17,7 @@ namespace PlaneFX.Services
             var content = new StringContent(JsonSerializer.Serialize(invoice),
                 Encoding.UTF8, "application/json");
 
-            string token = configuration[StartupService.TOKEN]!;
+            string token = configuration[StartupService.TG_API_TOKEN]!;
             var response = await client.PostAsync($"https://api.telegram.org/{token}/createInvoiceLink",
                 content);
 
