@@ -47,5 +47,7 @@ namespace PlaneFX.DTOs
         public required List<OpenedOrderDTO> OpenedOrders { get; set; }
 
         public List<ClosedOrderDTO> ClosedOrders { get; set; } = [];
+
+        public List<string> Tickers { get; set; } = [];
     }
 }
