@@ -9,17 +9,22 @@ namespace PlaneFX.Services
 		public const string TG_ID = "TG_ID";
 		public const string TG_USERNAME = "TG_USERNAME";
 		public const string TIME_ZONE = "TIME_ZONE";
+<<<<<<< HEAD
 		public const string TG_API_TOKEN = "TG_API_TOKEN";
+=======
+>>>>>>> main
 
 		public async Task MakeSU()
 		{
 			long? id = Convert.ToInt64(configuration[TG_ID]);
 			string? username = configuration[TG_USERNAME];
 			int? timeZone = Convert.ToInt32(configuration[TIME_ZONE]);
+<<<<<<< HEAD
 			string? token = configuration[TG_API_TOKEN];
+=======
+>>>>>>> main
 
-			if (id == null || string.IsNullOrEmpty(username)
-				|| timeZone == null || string.IsNullOrEmpty(token))
+			if (id == null || timeZone == null || string.IsNullOrEmpty(username))
 				throw new NullReferenceException("do enter SA user in config!");
 
 			foreach (User user in await userService.GetAllByRole(RoleEnum.SU))
