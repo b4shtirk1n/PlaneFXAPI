@@ -19,6 +19,9 @@ namespace PlaneFX.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> Complete(long id)
         {
+            if (!await commandService.IsExist(id))
+                return BadRequest();
+
             await commandService.Complete(id);
             return Ok();
         }
