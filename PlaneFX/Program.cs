@@ -19,6 +19,7 @@ builder.Services.AddTransient<AuthFilter>();
 builder.Services.AddTransient<AdminFilter>();
 
 builder.Services.AddTransient<StartupService>();
+builder.Services.AddTransient<AppService>();
 builder.Services.AddTransient<AdminService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<AccountService>();
