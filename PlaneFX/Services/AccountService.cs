@@ -61,7 +61,8 @@ namespace PlaneFX.Services
 
 		public async Task<Account?> Update(OrderDTO dTO)
 		{
-			if (await context.Accounts.FirstOrDefaultAsync(a => a.Number == dTO.AccountNumber) is not Account account)
+			if (await context.Accounts.FirstOrDefaultAsync(a => a.Number == dTO.AccountNumber)
+				is not Account account)
 				return null;
 
 			account.Balance = dTO.Balance;
