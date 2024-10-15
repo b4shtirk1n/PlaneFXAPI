@@ -31,6 +31,8 @@ public partial class PlaneFXContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
+    public virtual DbSet<Service> Services { get; set; }
+
     public virtual DbSet<Subscription> Subscriptions { get; set; }
 
     public virtual DbSet<SubscriptionsBilling> SubscriptionsBillings { get; set; }
