@@ -16,9 +16,6 @@ namespace PlaneFX.Services
         public async Task<IEnumerable<ClosedOrder>> GetCloseOrders(long id)
             => await context.ClosedOrders.Where(o => o.Account == id).ToListAsync();
 
-        public async Task<IEnumerable<OrderType>> GetTypes()
-            => await context.OrderTypes.ToListAsync();
-
         public async Task<bool> OrderExist(long orderId)
             => await context.OpenedOrders.AnyAsync(o => o.Order == orderId)
                 || await context.ClosedOrders.AnyAsync(o => o.Order == orderId);
