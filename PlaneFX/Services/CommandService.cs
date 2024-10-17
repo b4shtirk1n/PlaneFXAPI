@@ -15,8 +15,10 @@ namespace PlaneFX.Services
             {
                 Account = dTO.Account,
                 Order = dTO.Order,
-                Type = dTO.Type,
+                Volume = dTO.Volume,
                 Ticker = dTO.Ticker,
+                Type = dTO.Type,
+                OrderType = dTO.OrderType,
             });
             await context.SaveChangesAsync();
         }
