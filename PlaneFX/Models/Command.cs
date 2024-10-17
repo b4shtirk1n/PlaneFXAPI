@@ -19,6 +19,10 @@ public partial class Command
     [Column("order")]
     public long? Order { get; set; }
 
+    [Column("volume")]
+    [Precision(10, 5)]
+    public decimal? Volume { get; set; }
+
     [Column("ticker")]
     [StringLength(6)]
     public string? Ticker { get; set; }
@@ -26,14 +30,14 @@ public partial class Command
     [Column("type")]
     public int Type { get; set; }
 
+    [Column("order_type")]
+    [StringLength(15)]
+    public string? OrderType { get; set; }
+
     [Column("is_complete")]
     public bool IsComplete { get; set; }
 
     [ForeignKey("Account")]
     [InverseProperty("Commands")]
     public virtual Account AccountNavigation { get; set; } = null!;
-
-    [ForeignKey("Type")]
-    [InverseProperty("Commands")]
-    public virtual CommandType TypeNavigation { get; set; } = null!;
 }
