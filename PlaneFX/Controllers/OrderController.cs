@@ -28,10 +28,6 @@ namespace PlaneFX.Controllers
         public async Task<ActionResult<List<OpenedOrder>>> GetClosed(long id)
             => Ok(await orderService.GetCloseOrders(id));
 
-        [HttpGet("GetTypes")]
-        public async Task<ActionResult<List<OrderType>>> GetTypes()
-            => Ok(await orderService.GetTypes());
-
         [HttpPost]
         public async Task<ActionResult<List<Command>>> Update(OrderDTO dTO)
         {
