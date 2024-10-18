@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace PlaneFX.Models;
 
 [Table("command")]
+[Index("IsComplete", Name = "command_is_complete_index")]
 public partial class Command
 {
     [Key]
@@ -26,6 +27,10 @@ public partial class Command
     [Column("ticker")]
     [StringLength(6)]
     public string? Ticker { get; set; }
+
+    [Column("price")]
+    [Precision(10, 5)]
+    public decimal? Price { get; set; }
 
     [Column("type")]
     public int Type { get; set; }

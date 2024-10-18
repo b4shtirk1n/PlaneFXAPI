@@ -71,6 +71,8 @@ public partial class PlaneFXContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("command_pk");
 
+            entity.Property(e => e.IsComplete).HasDefaultValue(false);
+
             entity.HasOne(d => d.AccountNavigation).WithMany(p => p.Commands)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("command_account_id_fk");
@@ -141,11 +143,11 @@ public partial class PlaneFXContext : DbContext
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
-            entity.HasOne(d => d.ParentNavigation).WithMany(p => p.InverseParentNavigation).HasConstraintName("user_fk7");
+            entity.HasOne(d => d.ParentNavigation).WithMany(p => p.InverseParentNavigation).HasConstraintName("user_user_id_fk");
 
             entity.HasOne(d => d.RoleNavigation).WithMany(p => p.Users)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_fk4");
+                .HasConstraintName("user_role_id_fk");
         });
 
         modelBuilder.Entity<UserSubscription>(entity =>
