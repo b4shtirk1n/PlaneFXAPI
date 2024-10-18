@@ -17,6 +17,7 @@ namespace PlaneFX.Services
                 Order = dTO.Order,
                 Volume = dTO.Volume,
                 Ticker = dTO.Ticker,
+                Price = dTO.Price,
                 Type = dTO.Type,
                 OrderType = dTO.OrderType,
             });
