@@ -8,7 +8,7 @@ namespace PlaneFX.DTOs
         [Required]
         public required long Account { get; set; }
 
-        public long? Order { get; set; }
+        public long Order { get; set; }
 
         [Precision(10, 5)]
         public decimal Volume { get; set; }

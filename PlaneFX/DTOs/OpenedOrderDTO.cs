@@ -22,10 +22,10 @@ namespace PlaneFX.DTOs
         public required decimal PriceOpened { get; set; }
 
         [Precision(10, 5)]
-        public decimal? Sl { get; set; }
+        public decimal Sl { get; set; }
 
         [Precision(10, 5)]
-        public decimal? Tp { get; set; }
+        public decimal Tp { get; set; }
 
         [Required]
         [Precision(10, 5)]
