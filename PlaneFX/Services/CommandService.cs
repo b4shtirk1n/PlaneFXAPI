@@ -27,10 +27,7 @@ namespace PlaneFX.Services
             => await context.Commands.AnyAsync(c => c.Id == id);
 
         public async Task Complete(long id)
-        {
-            var command = await context.Commands.FindAsync(id);
-            command!.IsComplete = true;
-            await context.SaveChangesAsync();
-        }
+            => await context.Commands.Where(c => c.Id == id)
+                .ExecuteUpdateAsync(u => u.SetProperty(c => c.IsComplete, n => true));
     }
 }
