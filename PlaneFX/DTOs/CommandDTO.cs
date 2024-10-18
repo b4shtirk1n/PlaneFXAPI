@@ -16,6 +16,9 @@ namespace PlaneFX.DTOs
         [StringLength(6)]
         public string? Ticker { get; set; }
 
+        [Precision(10, 5)]
+        public decimal? Price { get; set; }
+
         [Required]
         public required int Type { get; set; }
 
