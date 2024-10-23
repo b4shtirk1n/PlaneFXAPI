@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace PlaneFX.Models;
 
 [Table("user")]
+[Index("Role", Name = "user_role_index")]
 [Index("TgId", Name = "user_tg_id_uindex", IsUnique = true)]
 [Index("Token", Name = "user_token_uindex", IsUnique = true)]
 public partial class User
