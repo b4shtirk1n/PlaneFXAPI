@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PlaneFX.Models;
+using PlaneFX.Requests;
 using PlaneFX.Services;
 
 namespace PlaneFX.Controllers
@@ -14,7 +15,7 @@ namespace PlaneFX.Controllers
             => Ok(await subscribeService.Get());
 
         [HttpPost("Checkout")]
-        public async Task<ActionResult<string>> CreateInvoice(Invoice invoice)
+        public async Task<ActionResult<string>> CreateInvoice(InvoiceRequest invoice)
             => Ok(await subscribeService.CreateInvoice(invoice));
     }
 }

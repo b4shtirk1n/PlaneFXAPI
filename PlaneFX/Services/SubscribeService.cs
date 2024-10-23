@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PlaneFX.Models;
+using PlaneFX.Requests;
 
 namespace PlaneFX.Services
 {
@@ -10,7 +11,7 @@ namespace PlaneFX.Services
         public async Task<IEnumerable<Subscription>> Get()
             => await context.Subscriptions.ToListAsync();
 
-        public async Task<string> CreateInvoice(Invoice invoice)
+        public async Task<string> CreateInvoice(InvoiceRequest invoice)
         {
             using HttpClient client = new();
             string json = JsonSerializer.Serialize(invoice);
