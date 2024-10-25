@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace PlaneFX.Models;
 
 [Table("closed_orders")]
-[Index("Order", Name = "closed_orders_order_uindex", IsUnique = true)]
+[Index("Order", Name = "closed_orders_order_index")]
 public partial class ClosedOrder
 {
     [Key]
