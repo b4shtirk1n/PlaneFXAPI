@@ -9,13 +9,11 @@ using PlaneFX.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureHttpJsonOptions(o =>
+builder.Services.AddControllers().AddJsonOptions(o =>
 {
-	o.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-	o.SerializerOptions.WriteIndented = true;
+	o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+	o.JsonSerializerOptions.WriteIndented = true;
 });
-
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<PlaneFXContext>();
