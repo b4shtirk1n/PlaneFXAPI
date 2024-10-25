@@ -8,7 +8,7 @@ namespace PlaneFX.Requests
     {
         [Required]
         [StringLength(32)]
-        public required string Name { get; set; }
+        public required string Title { get; set; }
 
         [Required]
         [StringLength(255)]
