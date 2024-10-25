@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using PlaneFX.Filters;
@@ -7,6 +8,12 @@ using PlaneFX.Models;
 using PlaneFX.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ConfigureHttpJsonOptions(o =>
+{
+	o.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+	o.SerializerOptions.WriteIndented = true;
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
