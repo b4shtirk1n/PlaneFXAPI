@@ -22,7 +22,7 @@ namespace PlaneFX.Services
 
         public async Task Process(OrderDTO dTO, long accountId)
         {
-            Clear(accountId);
+            await Clear(accountId);
 
             foreach (var openOrderDTO in dTO.OpenedOrders)
                 await CreateOpen(openOrderDTO, accountId, dTO.Timestamp);
@@ -67,8 +67,8 @@ namespace PlaneFX.Services
                 Symbol = dTO.Symbol,
             });
 
-        private void Clear(long accountId)
-            => context.OpenedOrders.Where(o => o.Account == accountId)
+        private async Task Clear(long accountId)
+            => await context.OpenedOrders.Where(o => o.Account == accountId)
                 .ExecuteDeleteAsync();
     }
 }
