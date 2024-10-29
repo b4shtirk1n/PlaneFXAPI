@@ -22,22 +22,13 @@ namespace PlaneFX.Services
 
         public async Task Process(OrderDTO dTO, long accountId)
         {
+            Clear(accountId);
+
             foreach (var openOrderDTO in dTO.OpenedOrders)
-                if (await context.OpenedOrders.FirstOrDefaultAsync(o => o.Order == openOrderDTO.Order)
-                    is OpenedOrder openOrder)
-                    Update(openOrder, openOrderDTO, dTO.Timestamp);
-                else
-                    await CreateOpen(openOrderDTO, accountId, dTO.Timestamp);
+                await CreateOpen(openOrderDTO, accountId, dTO.Timestamp);
 
             foreach (var closeOrderDTO in dTO.ClosedOrders)
-                if (await context.OpenedOrders.FirstOrDefaultAsync(o => o.Order == closeOrderDTO.Order)
-                    is OpenedOrder openOrder)
-                {
-                    Close(openOrder);
-                    await CreateClose(closeOrderDTO, accountId);
-                }
-                else
-                    await CreateClose(closeOrderDTO, accountId);
+                await CreateClose(closeOrderDTO, accountId);
 
             await context.SaveChangesAsync();
         }
@@ -76,21 +67,8 @@ namespace PlaneFX.Services
                 Symbol = dTO.Symbol,
             });
 
-        private static void Update(OpenedOrder openOrder, OpenedOrderDTO dTO, long timeUpdate)
-        {
-            openOrder.Volume = dTO.Volume;
-            openOrder.TimeOpened = DateTimeOffset.FromUnixTimeSeconds(dTO.TimeOpened).UtcDateTime;
-            openOrder.PriceOpened = dTO.PriceOpened;
-            openOrder.Sl = dTO.Sl;
-            openOrder.Tp = dTO.Tp;
-            openOrder.Swap = dTO.Swap;
-            openOrder.Commissions = dTO.Commissions;
-            openOrder.Profit = dTO.Profit;
-            openOrder.Symbol = dTO.Symbol;
-            openOrder.TimeUpdate = DateTimeOffset.FromUnixTimeSeconds(timeUpdate).UtcDateTime;
-        }
-
-        private void Close(OpenedOrder openOrder)
-            => context.OpenedOrders.Remove(openOrder);
+        private void Clear(long accountId)
+            => context.OpenedOrders.Where(o => o.Account == accountId)
+                .ExecuteDeleteAsync();
     }
 }
