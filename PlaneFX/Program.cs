@@ -16,7 +16,7 @@ builder.Services.AddControllers().AddJsonOptions(o =>
 });
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddDbContext<PlaneFXContext>();
+builder.Services.AddDbContext<PlaneFXContext>(ServiceLifetime.Transient);
 
 builder.Services.AddTransient<DbConnectionMiddleware>();
 
