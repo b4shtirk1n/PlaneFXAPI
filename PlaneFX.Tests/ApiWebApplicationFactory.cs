@@ -13,15 +13,15 @@ namespace PlaneFX.Tests
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureAppConfiguration(c => c.AddConfiguration(Configuration));
-            builder.ConfigureTestServices(services =>
+            builder.ConfigureTestServices(s =>
             {
                 var descriptorType = typeof(DbContextOptions<PlaneFXContext>);
-                var descriptor = services.SingleOrDefault(s => s.ServiceType == descriptorType);
+                var descriptor = s.SingleOrDefault(s => s.ServiceType == descriptorType);
 
                 if (descriptor is not null)
-                    services.Remove(descriptor);
+                    s.Remove(descriptor);
 
-                services.AddDbContext<PlaneFXContext>(o => o.UseNpgsql(postgres.GetConnectionString()));
+                s.AddDbContext<PlaneFXContext>(o => o.UseNpgsql(postgres.GetConnectionString()));
             });
         }
 

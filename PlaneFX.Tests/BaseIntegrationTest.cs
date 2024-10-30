@@ -21,7 +21,6 @@ namespace PlaneFX.Tests
         {
             scope?.Dispose();
             DbContext?.Dispose();
-            GC.SuppressFinalize(this);
         }
     }
 }
