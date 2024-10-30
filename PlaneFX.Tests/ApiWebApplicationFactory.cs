@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System.Data.Common;
 
 namespace PlaneFX.Tests
 {
@@ -15,16 +15,13 @@ namespace PlaneFX.Tests
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureAppConfiguration(c => c.AddConfiguration(Configuration));
-            builder.ConfigureTestServices(s =>
+            builder.ConfigureServices(services =>
             {
-                var descriptorType = typeof(DbContextOptions<PlaneFXContext>);
-                var descriptor = s.SingleOrDefault(s => s.ServiceType == descriptorType);
+                services.Remove(services.SingleOrDefault(s =>
+                    typeof(DbContextOptions<PlaneFXContext>) == s.ServiceType)!);
 
-                if (descriptor is not null)
-                    s.Remove(descriptor);
-
-                Debug.WriteLine(postgres.GetConnectionString());
-                s.AddDbContext<PlaneFXContext>(o => o.UseNpgsql(postgres.GetConnectionString()));
+                services.Remove(services.SingleOrDefault(s => typeof(DbConnection) == s.ServiceType)!);
+                services.AddDbContext<PlaneFXContext>(o => o.UseNpgsql(postgres.GetConnectionString()));
             });
         }
 
