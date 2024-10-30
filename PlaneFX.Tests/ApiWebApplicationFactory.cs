@@ -21,6 +21,7 @@ namespace PlaneFX.Tests
                 if (descriptor is not null)
                     s.Remove(descriptor);
 
+                Console.WriteLine(postgres.GetConnectionString());
                 s.AddDbContext<PlaneFXContext>(o => o.UseNpgsql(postgres.GetConnectionString()));
             });
         }

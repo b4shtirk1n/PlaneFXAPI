@@ -15,8 +15,6 @@ namespace PlaneFX.Tests
             DbContext = scope.ServiceProvider.GetRequiredService<PlaneFXContext>();
             startup = scope.ServiceProvider.GetRequiredService<StartupService>();
             userService = scope.ServiceProvider.GetRequiredService<UserService>();
-
-            DbContext.Database.EnsureCreated();
         }
 
         public void Dispose()
