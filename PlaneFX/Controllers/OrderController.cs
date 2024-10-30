@@ -13,7 +13,8 @@ namespace PlaneFX.Controllers
         OrderService orderService,
         AccountService accountService,
         UserService userService,
-        CommandService commandService
+        CommandService commandService,
+        ILogger<OrderController> logger
     ) : ControllerBase
     {
         [HttpGet("{id}")]
@@ -56,6 +57,7 @@ namespace PlaneFX.Controllers
             }
             catch
             {
+                logger.LogError("Synchronization error");
                 return Conflict();
             }
         }
