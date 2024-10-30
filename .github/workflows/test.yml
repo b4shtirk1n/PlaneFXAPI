@@ -1,0 +1,19 @@
+name: Run Tests 🚀
+on: [push]
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore ./Products.Api.sln
+
+      - name: Build
+        run: dotnet build ./Products.Api.sln --no-restore
+
+      - name: Test
+        run: dotnet test ./Products.Api.sln --no-build
