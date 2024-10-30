@@ -20,6 +20,7 @@ namespace PlaneFX.Tests
                 services.Remove(services.SingleOrDefault(s =>
                     typeof(DbContextOptions<PlaneFXContext>) == s.ServiceType)!);
 
+                services.Remove(services.SingleOrDefault(s => typeof(PlaneFXContext) == s.ServiceType)!);
                 services.Remove(services.SingleOrDefault(s => typeof(DbConnection) == s.ServiceType)!);
                 services.AddDbContext<PlaneFXContext>(o => o.UseNpgsql(postgres.GetConnectionString()));
             });
