@@ -19,8 +19,8 @@ namespace PlaneFX
 
 			builder.Services.AddSerilog((s, l) => l
 				.MinimumLevel.Information()
-				.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-				.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
+				.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+				.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
 				.WriteTo.Console());
 
 			builder.Services.AddControllers().AddJsonOptions(o =>

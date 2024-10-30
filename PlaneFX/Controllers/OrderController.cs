@@ -32,9 +32,6 @@ namespace PlaneFX.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Command>>> Update(OrderDTO dTO)
         {
-            logger.LogInformation("info");
-            logger.LogWarning("warn");
-            logger.LogError("err");
             if (await accountService.GetByNumber(dTO.AccountNumber) is not AccountResponse account)
             {
                 if (await userService.GetByToken(dTO.Token) is not User user)
