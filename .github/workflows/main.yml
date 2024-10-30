@@ -1,15 +1,19 @@
-name: Remote deploy
+name: Run tests
 on: [push]
 jobs:
-  build:
-    name: Deploy API
+  run-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands
-        uses: appleboy/ssh-action@master
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          host: ${{ secrets.IP }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: ${{ secrets.DEPLOY }}
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore ./PlaneFX.sln
+
+      - name: Build
+        run: dotnet build ./PlaneFX.sln --no-restore
+
+      - name: Test
+        run: dotnet test ./PlaneFX.sln --no-build

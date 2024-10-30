@@ -1,19 +1,15 @@
-name: Run Tests 🚀
+name: Remote deploy
 on: [push]
 jobs:
-  run-tests:
+  build:
+    name: Deploy API
     runs-on: ubuntu-latest
     steps:
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@master
         with:
-          dotnet-version: '8.0.x'
-
-      - name: Restore
-        run: dotnet restore ./Products.Api.sln
-
-      - name: Build
-        run: dotnet build ./Products.Api.sln --no-restore
-
-      - name: Test
-        run: dotnet test ./Products.Api.sln --no-build
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: ${{ secrets.DEPLOY }}
