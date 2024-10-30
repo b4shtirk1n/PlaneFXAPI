@@ -13,8 +13,7 @@ namespace PlaneFX.Controllers
         OrderService orderService,
         AccountService accountService,
         UserService userService,
-        CommandService commandService,
-        ILogger<OrderController> logger
+        CommandService commandService
     ) : ControllerBase
     {
         [HttpGet("{id}")]
