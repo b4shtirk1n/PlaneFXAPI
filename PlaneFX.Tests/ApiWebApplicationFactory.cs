@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace PlaneFX.Tests
 {
     public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
@@ -21,7 +23,7 @@ namespace PlaneFX.Tests
                 if (descriptor is not null)
                     s.Remove(descriptor);
 
-                Console.WriteLine(postgres.GetConnectionString());
+                Debug.WriteLine(postgres.GetConnectionString());
                 s.AddDbContext<PlaneFXContext>(o => o.UseNpgsql(postgres.GetConnectionString()));
             });
         }
