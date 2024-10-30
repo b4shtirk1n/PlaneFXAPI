@@ -22,7 +22,7 @@ namespace PlaneFX
 			});
 			builder.Services.AddEndpointsApiExplorer();
 
-			builder.Services.AddDbContext<PlaneFXContext>(ServiceLifetime.Transient);
+			builder.Services.AddDbContext<PlaneFXContext>();
 
 			builder.Services.AddTransient<DbConnectionMiddleware>();
 
@@ -51,17 +51,17 @@ namespace PlaneFX
 				});
 				o.AddSecurityRequirement(new OpenApiSecurityRequirement
 				{
-		{
-			new OpenApiSecurityScheme
-			{
-				Reference = new OpenApiReference
-				{
-					Id = JwtBearerDefaults.AuthenticationScheme,
-					Type = ReferenceType.SecurityScheme
-				}
-			},
-			Array.Empty<string>()
-		}
+					{
+						new OpenApiSecurityScheme
+						{
+							Reference = new OpenApiReference
+							{
+								Id = JwtBearerDefaults.AuthenticationScheme,
+								Type = ReferenceType.SecurityScheme
+							}
+						},
+						Array.Empty<string>()
+					}
 				});
 			});
 

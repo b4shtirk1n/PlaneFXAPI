@@ -49,8 +49,8 @@ namespace PlaneFX.Controllers
             }
             try
             {
-                await Task.WhenAll(accountService.Update(dTO),
-                    orderService.Process(dTO, account.Account.Id));
+                await accountService.Update(dTO);
+                await orderService.Process(dTO, account.Account.Id);
 
                 return Ok(await commandService.GetUnComplete());
             }
