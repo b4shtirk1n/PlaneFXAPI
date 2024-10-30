@@ -1,0 +1,20 @@
+name: Remote Deploy
+on:
+  workflow_run:
+    workflows: [Run Tests]
+    types:
+      - completed
+
+jobs:
+  build:
+    name: Deploy API
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: ${{ secrets.DEPLOY }}
