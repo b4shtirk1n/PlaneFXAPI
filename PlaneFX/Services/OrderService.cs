@@ -27,7 +27,14 @@ namespace PlaneFX.Services
             foreach (var openOrderDTO in dTO.OpenedOrders)
                 await CreateOpen(openOrderDTO, accountId, dTO.Timestamp);
 
-            foreach (var closeOrderDTO in dTO.ClosedOrders)
+            List<ClosedOrderDTO> unExistedOrders = dTO.ClosedOrders
+                .Where(o => !context.ClosedOrders
+                    .Where(c => c.Account == accountId)
+                    .Select(c => c.Order)
+                    .Contains(o.Order))
+                .ToList();
+
+            foreach (var closeOrderDTO in unExistedOrders)
                 await CreateClose(closeOrderDTO, accountId);
 
             await context.SaveChangesAsync();
