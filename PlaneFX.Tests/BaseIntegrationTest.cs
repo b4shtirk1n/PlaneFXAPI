@@ -1,3 +1,4 @@
+
 namespace PlaneFX.Tests
 {
     public abstract class BaseIntegrationTest : IClassFixture<ApiWebApplicationFactory>, IDisposable

@@ -4,7 +4,7 @@ using PlaneFX.Models;
 
 namespace PlaneFX.Services
 {
-	public class StartupService(IConfiguration configuration, UserService userService)
+	public class StartupService(IConfiguration configuration, UserService userService, PlaneFXContext context)
 	{
 		public const string TG_ID = "TG_ID";
 		public const string TG_USERNAME = "TG_USERNAME";
@@ -21,6 +21,15 @@ namespace PlaneFX.Services
 			if (id == null || string.IsNullOrEmpty(username)
 				|| timeZone == null || string.IsNullOrEmpty(token))
 				throw new NullReferenceException("do enter SA user in config!");
+
+			try
+			{
+				await userService.GetAllByRole(RoleEnum.SU);
+			}
+			catch
+			{
+				await context.Database.EnsureCreatedAsync();
+			}
 
 			foreach (User user in await userService.GetAllByRole(RoleEnum.SU))
 				await userService.ChangeRole(user, RoleEnum.Admin);

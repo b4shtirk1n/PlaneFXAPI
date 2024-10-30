@@ -21,7 +21,7 @@ namespace PlaneFX.Tests
             configuration[StartupService.TIME_ZONE] = "5";
             configuration[StartupService.TG_API_TOKEN] = "ghfjkdy57494hf";
 
-            await startup.MakeSU();
+            await Assert.ThrowsAsync<DbUpdateException>(startup.MakeSU);
         }
 
         [Fact]

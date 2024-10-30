@@ -1,5 +1,3 @@
-using System.Data.Common;
-
 namespace PlaneFX.Tests
 {
     public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
@@ -14,16 +12,9 @@ namespace PlaneFX.Tests
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureAppConfiguration(c => c.AddConfiguration(Configuration));
-            builder.ConfigureServices(services =>
-            {
-                services.Remove(services.SingleOrDefault(s =>
-                    typeof(DbContextOptions<PlaneFXContext>) == s.ServiceType)!);
+            Configuration["ConnectionStrings:PlaneFX"] = postgres.GetConnectionString();
 
-                services.Remove(services.SingleOrDefault(s => typeof(PlaneFXContext) == s.ServiceType)!);
-                services.Remove(services.SingleOrDefault(s => typeof(DbConnection) == s.ServiceType)!);
-                services.AddDbContext<PlaneFXContext>(o => o.UseNpgsql(postgres.GetConnectionString()));
-            });
+            builder.ConfigureAppConfiguration(c => c.AddConfiguration(Configuration));
         }
 
         public Task InitializeAsync() => postgres.StartAsync();
