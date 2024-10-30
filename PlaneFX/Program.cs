@@ -6,6 +6,8 @@ using PlaneFX.Filters;
 using PlaneFX.Middlewares;
 using PlaneFX.Models;
 using PlaneFX.Services;
+using Serilog;
+using Serilog.Events;
 
 namespace PlaneFX
 {
@@ -14,6 +16,12 @@ namespace PlaneFX
 		private static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+
+			builder.Services.AddSerilog((s, l) => l
+				.MinimumLevel.Information()
+				.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+				.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
+				.WriteTo.Console());
 
 			builder.Services.AddControllers().AddJsonOptions(o =>
 			{
@@ -67,6 +75,7 @@ namespace PlaneFX
 
 			var app = builder.Build();
 
+			app.UseSerilogRequestLogging();
 			app.UseSwagger();
 			app.UseSwaggerUI();
 
