@@ -2,7 +2,7 @@ namespace PlaneFX.Tests
 {
     public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
-        private readonly IConfiguration Configuration = new ConfigurationBuilder()
+        private readonly IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .Build();
 
@@ -12,9 +12,13 @@ namespace PlaneFX.Tests
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            Configuration["ConnectionStrings:PlaneFX"] = postgres.GetConnectionString();
+            configuration["ConnectionStrings:PlaneFX"] = postgres.GetConnectionString();
+            configuration[StartupService.TG_ID] = "123456789";
+            configuration[StartupService.TG_USERNAME] = "cherkashh";
+            configuration[StartupService.TIME_ZONE] = "5";
+            configuration[StartupService.TG_API_TOKEN] = "ghfjkdy57494hf";
 
-            builder.ConfigureAppConfiguration(c => c.AddConfiguration(Configuration));
+            builder.ConfigureAppConfiguration(c => c.AddConfiguration(configuration));
         }
 
         public Task InitializeAsync() => postgres.StartAsync();

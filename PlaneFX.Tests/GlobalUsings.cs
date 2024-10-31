@@ -1,12 +1,13 @@
 global using Xunit;
-global using Npgsql;
+global using System.Net;
 global using PlaneFX.Models;
 global using PlaneFX.Services;
+global using PlaneFX.Responses;
+global using System.Net.Http.Json;
 global using Testcontainers.PostgreSql;
+global using PlaneFX.Tests.Abstractions;
 global using Microsoft.AspNetCore.Hosting;
-global using Microsoft.AspNetCore.TestHost;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Mvc.Testing;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
-global using Microsoft.VisualStudio.TestPlatform.TestHost;

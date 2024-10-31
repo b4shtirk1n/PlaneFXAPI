@@ -1,5 +1,4 @@
-
-namespace PlaneFX.Tests
+namespace PlaneFX.Tests.Abstractions
 {
     public abstract class BaseIntegrationTest : IClassFixture<ApiWebApplicationFactory>, IDisposable
     {
@@ -7,7 +6,6 @@ namespace PlaneFX.Tests
         protected readonly IConfiguration configuration;
         protected readonly PlaneFXContext DbContext;
         protected readonly StartupService startup;
-        protected readonly UserService userService;
 
         protected BaseIntegrationTest(ApiWebApplicationFactory factory)
         {
@@ -15,13 +13,12 @@ namespace PlaneFX.Tests
             configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
             DbContext = scope.ServiceProvider.GetRequiredService<PlaneFXContext>();
             startup = scope.ServiceProvider.GetRequiredService<StartupService>();
-            userService = scope.ServiceProvider.GetRequiredService<UserService>();
         }
 
         public void Dispose()
         {
-            scope?.Dispose();
-            DbContext?.Dispose();
+            scope.Dispose();
+            DbContext.Dispose();
             GC.SuppressFinalize(this);
         }
     }
