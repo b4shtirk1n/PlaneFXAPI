@@ -14,11 +14,9 @@ namespace PlaneFX.Services
             => await context.OpenedOrders.Where(o => o.Account == id).ToListAsync();
 
         public async Task<IEnumerable<ClosedOrder>> GetCloseOrders(long id)
-            => await context.ClosedOrders.Where(o => o.Account == id).ToListAsync();
-
-        public async Task<bool> OrderExist(long orderId)
-            => await context.OpenedOrders.AnyAsync(o => o.Order == orderId)
-                || await context.ClosedOrders.AnyAsync(o => o.Order == orderId);
+            => await context.ClosedOrders.Where(o => o.Account == id)
+                .OrderByDescending(o => o.TimeClosed)
+                .ToListAsync();
 
         public async Task Process(OrderDTO dTO, long accountId)
         {
@@ -75,7 +73,6 @@ namespace PlaneFX.Services
             });
 
         private async Task Clear(long accountId)
-            => await context.OpenedOrders.Where(o => o.Account == accountId)
-                .ExecuteDeleteAsync();
+            => await context.OpenedOrders.Where(o => o.Account == accountId).ExecuteDeleteAsync();
     }
 }
