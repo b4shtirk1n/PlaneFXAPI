@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PlaneFX.DTOs;
 using PlaneFX.Models;
 using PlaneFX.Responses;
@@ -47,6 +48,9 @@ namespace PlaneFX.Services
                 .Skip(TAKE * (page - 1))
                 .Take(TAKE + 1)
                 .ToListAsync();
+
+            if (orders.IsNullOrEmpty())
+                return new(orders);
 
             T lastOrder = orders.Last();
             orders = orders.Take(TAKE);
