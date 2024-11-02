@@ -56,7 +56,7 @@ namespace PlaneFX.Services
             T lastOrder = orders.Last();
             orders = orders.Take(TAKE);
 
-            return new(orders, orders.Last()!.Equals(lastOrder));
+            return new(orders, !orders.Last()!.Equals(lastOrder));
         }
 
         private async Task CreateOpen(OpenedOrderDTO dTO, long accountId, long timeUpdate)
