@@ -15,19 +15,26 @@ namespace PlaneFX.Services
 			=> await context.Users.FirstOrDefaultAsync(u => u.TgId == tgId);
 
 		public async Task<User?> GetByToken(string token)
-			=> await context.Users.FirstOrDefaultAsync(u => u.Token == token);
+			=> await context.Users.AsNoTracking()
+				.FirstOrDefaultAsync(u => u.Token == token);
 
 		public async Task<IEnumerable<User>> Get()
-			=> await context.Users.ToListAsync();
+			=> await context.Users.AsNoTracking()
+				.ToListAsync();
 
 		public async Task<IEnumerable<User>> GetAllFromAdmin()
-			=> await context.Users.Where(u => u.Role != (int)RoleEnum.SU).ToListAsync();
+			=> await context.Users.AsNoTracking()
+				.Where(u => u.Role != (int)RoleEnum.SU)
+				.ToListAsync();
 
 		public async Task<IEnumerable<User>> GetAllByRole(RoleEnum role)
-			=> await context.Users.Where(u => u.Role == (int)role).ToListAsync();
+			=> await context.Users.AsNoTracking()
+				.Where(u => u.Role == (int)role)
+				.ToListAsync();
 
 		public async Task<bool> IsExist(long tgId)
-			=> await context.Users.AnyAsync(u => u.TgId == tgId);
+			=> await context.Users.AsNoTracking()
+				.AnyAsync(u => u.TgId == tgId);
 
 		public async Task<User> Add(UserDTO dTO)
 		{

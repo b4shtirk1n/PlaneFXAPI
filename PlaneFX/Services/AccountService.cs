@@ -12,39 +12,44 @@ namespace PlaneFX.Services
 			if (await context.Accounts.FindAsync(id) is not Account account)
 				return null;
 
-			int countOrders = await context.OpenedOrders.CountAsync(o => o.Account == id);
-			return new(account, countOrders);
+			return new(account, await CountOpenOrders(account.Id));
 		}
 
 		public async Task<AccountResponse?> GetByNumber(long number)
 		{
-			if (await context.Accounts.FirstOrDefaultAsync(a => a.Number == number)
+			if (await context.Accounts.AsNoTracking()
+				.FirstOrDefaultAsync(a => a.Number == number)
 				is not Account account)
 				return null;
 
-			int countOrders = await context.OpenedOrders.CountAsync(o => o.Account == account.Id);
-			return new(account, countOrders);
+			return new(account, await CountOpenOrders(account.Id));
 		}
 
 		public async Task<IEnumerable<AccountResponse>> GetByUser(long id)
 		{
-			var accounts = await context.Accounts.Where(a => a.User == id).ToListAsync();
+			var accounts = await context.Accounts.AsNoTracking()
+				.Where(a => a.User == id)
+				.ToListAsync();
+
 			List<AccountResponse> res = [];
 
 			foreach (var account in accounts)
 			{
-				int countOrders = await context.OpenedOrders.CountAsync(o => o.Account == account.Id);
+				int countOrders = await context.OpenedOrders.AsNoTracking()
+					.CountAsync(o => o.Account == account.Id);
+
 				res.Add(new(account, countOrders));
 			}
 			return res;
 		}
 
 		public async Task<bool> IsExist(AccountDTO dTO)
-		  	=> await context.Accounts.AnyAsync(a => a.Name == dTO.Name && a.User == dTO.User);
+		  	=> await context.Accounts.AsNoTracking()
+				.AnyAsync(a => a.Name == dTO.Name && a.User == dTO.User);
 
 		public async Task<bool> IsReferral(long user)
-			=> await context.UserSubscriptions.AnyAsync(uS => uS.User == user
-				&& uS.Date >= DateOnly.FromDateTime(DateTime.Now));
+			=> await context.UserSubscriptions.AsNoTracking()
+				.AnyAsync(s => s.User == user && s.Date >= DateOnly.FromDateTime(DateTime.Now));
 
 		public async Task<Account> Create(AccountDTO dTO)
 		{
@@ -76,5 +81,9 @@ namespace PlaneFX.Services
 			await context.SaveChangesAsync();
 			return account;
 		}
+
+		private async Task<int> CountOpenOrders(long id)
+			=> await context.OpenedOrders.AsNoTracking()
+				.CountAsync(o => o.Account == id);
 	}
 }

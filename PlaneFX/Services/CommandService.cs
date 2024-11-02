@@ -7,7 +7,9 @@ namespace PlaneFX.Services
     public class CommandService(PlaneFXContext context)
     {
         public async Task<IEnumerable<Command>> GetUnComplete()
-            => await context.Commands.Where(c => !c.IsComplete).ToListAsync();
+            => await context.Commands.AsNoTracking()
+                .Where(c => !c.IsComplete)
+                .ToListAsync();
 
         public async Task Create(CommandDTO dTO)
         {
@@ -25,7 +27,8 @@ namespace PlaneFX.Services
         }
 
         public async Task<bool> IsExist(long id)
-            => await context.Commands.AnyAsync(c => c.Id == id);
+            => await context.Commands.AsNoTracking()
+                .AnyAsync(c => c.Id == id);
 
         public async Task Complete(long id)
             => await context.Commands.Where(c => c.Id == id)

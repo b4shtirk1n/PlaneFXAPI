@@ -7,7 +7,9 @@ namespace PlaneFX.Services
     {
         public async Task<string?> GetTickers()
         {
-            var res = await context.Services.FirstOrDefaultAsync();
+            var res = await context.Services.AsNoTracking()
+                .FirstOrDefaultAsync();
+
             return res?.Tickers;
         }
     }
