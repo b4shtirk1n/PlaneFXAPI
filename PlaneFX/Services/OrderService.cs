@@ -19,7 +19,8 @@ namespace PlaneFX.Services
 
         public async Task<PaginationResponse<ClosedOrder>> GetCloseOrders(long id, int page = 1)
             => await Pagination(context.ClosedOrders.AsNoTracking()
-                .Where(o => o.Account == id), page);
+                .Where(o => o.Account == id)
+                .OrderByDescending(o => o.TimeClosed), page);
 
         public async Task Process(OrderDTO dTO, long accountId)
         {
