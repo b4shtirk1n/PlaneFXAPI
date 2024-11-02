@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using PlaneFX.DTOs;
+using PlaneFX.Extensions;
 using PlaneFX.Models;
 using PlaneFX.Responses;
 
@@ -14,13 +14,15 @@ namespace PlaneFX.Services
             => new(await GetOpenOrders(id), await GetCloseOrders(id));
 
         public async Task<PaginationResponse<OpenedOrder>> GetOpenOrders(long id, int page = 1)
-            => await Pagination(context.OpenedOrders.AsNoTracking()
-                .Where(o => o.Account == id), page);
+            => await context.OpenedOrders.AsNoTracking()
+                .Where(o => o.Account == id)
+                .Pagination(TAKE, page);
 
         public async Task<PaginationResponse<ClosedOrder>> GetCloseOrders(long id, int page = 1)
-            => await Pagination(context.ClosedOrders.AsNoTracking()
+            => await context.ClosedOrders.AsNoTracking()
                 .Where(o => o.Account == id)
-                .OrderByDescending(o => o.TimeClosed), page);
+                .OrderByDescending(o => o.TimeClosed)
+                .Pagination(TAKE, page);
 
         public async Task Process(OrderDTO dTO, long accountId)
         {
@@ -41,22 +43,6 @@ namespace PlaneFX.Services
                 await CreateClose(closeOrderDTO, accountId);
 
             await context.SaveChangesAsync();
-        }
-
-        private async Task<PaginationResponse<T>> Pagination<T>(IQueryable<T> query, int page)
-        {
-            IEnumerable<T> orders = await query
-                .Skip(TAKE * (page - 1))
-                .Take(TAKE + 1)
-                .ToListAsync();
-
-            if (orders.IsNullOrEmpty())
-                return new(orders);
-
-            T lastOrder = orders.Last();
-            orders = orders.Take(TAKE);
-
-            return new(orders, !orders.Last()!.Equals(lastOrder));
         }
 
         private async Task CreateOpen(OpenedOrderDTO dTO, long accountId, long timeUpdate)
