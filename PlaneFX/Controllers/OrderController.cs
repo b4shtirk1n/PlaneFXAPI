@@ -22,12 +22,20 @@ namespace PlaneFX.Controllers
             => Ok(await orderService.Get(id));
 
         [HttpGet("GetOpen/{id}")]
-        public async Task<ActionResult<PaginationResponse<OpenedOrder>>> GetOpened(long id)
+        public async Task<ActionResult<IEnumerable<OpenedOrder>>> GetOpened(long id)
             => Ok(await orderService.GetOpenOrders(id));
 
         [HttpGet("GetClose/{id}")]
-        public async Task<ActionResult<PaginationResponse<OpenedOrder>>> GetClosed(long id)
+        public async Task<ActionResult<IEnumerable<OpenedOrder>>> GetClosed(long id)
             => Ok(await orderService.GetCloseOrders(id));
+
+        [HttpGet("V2/GetOpen/{id}")]
+        public async Task<ActionResult<PaginationResponse<OpenedOrder>>> GetOpenedV2(long id)
+            => Ok(await orderService.GetOpenOrdersV2(id));
+
+        [HttpGet("V2/GetClose/{id}")]
+        public async Task<ActionResult<PaginationResponse<OpenedOrder>>> GetClosedV2(long id)
+            => Ok(await orderService.GetCloseOrdersV2(id));
 
         [HttpPost]
         public async Task<ActionResult<List<Command>>> Update(OrderDTO dTO)

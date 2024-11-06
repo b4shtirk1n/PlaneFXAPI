@@ -13,12 +13,27 @@ namespace PlaneFX.Services
         public async Task<OrderResponse> Get(long id)
             => new(await GetOpenOrders(id), await GetCloseOrders(id));
 
-        public async Task<PaginationResponse<OpenedOrder>> GetOpenOrders(long id, int page = 1)
+        public async Task<OrderResponseV2> GetV2(long id)
+            => new(await GetOpenOrdersV2(id), await GetCloseOrdersV2(id));
+
+        public async Task<IEnumerable<OpenedOrder>> GetOpenOrders(long id)
+            => await context.OpenedOrders.AsNoTracking()
+                .Where(o => o.Account == id)
+                .ToListAsync();
+
+        public async Task<IEnumerable<ClosedOrder>> GetCloseOrders(long id)
+            => await context.ClosedOrders.AsNoTracking()
+                .Where(o => o.Account == id)
+                .OrderByDescending(o => o.TimeClosed)
+                .ToListAsync();
+
+
+        public async Task<PaginationResponse<OpenedOrder>> GetOpenOrdersV2(long id, int page = 1)
             => await context.OpenedOrders.AsNoTracking()
                 .Where(o => o.Account == id)
                 .Pagination(TAKE, page);
 
-        public async Task<PaginationResponse<ClosedOrder>> GetCloseOrders(long id, int page = 1)
+        public async Task<PaginationResponse<ClosedOrder>> GetCloseOrdersV2(long id, int page = 1)
             => await context.ClosedOrders.AsNoTracking()
                 .Where(o => o.Account == id)
                 .OrderByDescending(o => o.TimeClosed)
