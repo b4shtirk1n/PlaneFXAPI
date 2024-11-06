@@ -2,11 +2,10 @@ using PlaneFX.Models;
 
 namespace PlaneFX.Responses
 {
-    public class OrderResponse(IEnumerable<OpenedOrder> paginationOpenedOrders,
-        IEnumerable<ClosedOrder> paginationClosedOrders)
+    public class OrderResponse(IEnumerable<OpenedOrder> OpenedOrders, IEnumerable<ClosedOrder> ClosedOrders)
     {
-        public IEnumerable<OpenedOrder> PaginationOpenedOrders { get; set; } = paginationOpenedOrders;
+        public IEnumerable<OpenedOrder> OpenedOrders { get; set; } = OpenedOrders;
 
-        public IEnumerable<ClosedOrder> PaginationClosedOrders { get; set; } = paginationClosedOrders;
+        public IEnumerable<ClosedOrder> ClosedOrders { get; set; } = ClosedOrders;
     }
 }
