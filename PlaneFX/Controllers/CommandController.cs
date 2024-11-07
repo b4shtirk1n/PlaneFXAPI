@@ -8,7 +8,11 @@ namespace PlaneFX.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class CommandController(UserService userService, CommandService commandService) : ControllerBase
+    public class CommandController(
+        UserService userService,
+        AccountService accountService,
+        CommandService commandService
+    ) : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> Create(CommandDTO dTO)
@@ -17,16 +21,17 @@ namespace PlaneFX.Controllers
             return Ok();
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> Complete(CommandRequest request)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Complete(long id, CommandRequest request)
         {
             if (await userService.GetByToken(request.Token) == null)
                 return Unauthorized();
 
-            if (!await commandService.IsExist(request.Id))
+            if (!await commandService.IsExist(id)
+                || await accountService.GetByNumber(request.AccountNumber) == null)
                 return NotFound();
 
-            await commandService.Complete(request.Id);
+            await commandService.Complete(id);
             return Ok();
         }
     }
