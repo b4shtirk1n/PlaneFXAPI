@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace PlaneFX
+namespace PlaneFX.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]

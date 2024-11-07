@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PlaneFX.DTOs;
+using PlaneFX.Requests;
 using PlaneFX.Services;
 
 namespace PlaneFX.Controllers
@@ -7,7 +8,7 @@ namespace PlaneFX.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class CommandController(CommandService commandService) : ControllerBase
+    public class CommandController(UserService userService, CommandService commandService) : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> Create(CommandDTO dTO)
@@ -16,13 +17,16 @@ namespace PlaneFX.Controllers
             return Ok();
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Complete(long id)
+        [HttpPatch]
+        public async Task<IActionResult> Complete(CommandRequest request)
         {
-            if (!await commandService.IsExist(id))
+            if (await userService.GetByToken(request.Token) == null)
+                return Unauthorized();
+
+            if (!await commandService.IsExist(request.Id))
                 return NotFound();
 
-            await commandService.Complete(id);
+            await commandService.Complete(request.Id);
             return Ok();
         }
     }
