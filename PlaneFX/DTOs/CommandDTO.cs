@@ -22,7 +22,8 @@ namespace PlaneFX.DTOs
         [Required]
         public required int Type { get; set; }
 
+        [Required]
         [StringLength(15)]
-        public string? OrderType { get; set; }
+        public required string OrderType { get; set; }
     }
 }
