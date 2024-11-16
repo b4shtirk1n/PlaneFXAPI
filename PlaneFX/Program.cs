@@ -99,7 +99,7 @@ namespace PlaneFX
 			}
 			app.UseMiddleware<DbConnectionMiddleware>();
 			app.MapControllers();
-			app.Run();
+			await app.RunAsync();
 
 			await app.Services.GetRequiredService<StartupService>().MakeSU();
 		}
