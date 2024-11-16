@@ -3,11 +3,33 @@ using PlaneFX.DTOs;
 using PlaneFX.Enums;
 using PlaneFX.Helpers;
 using PlaneFX.Models;
+using Telegram.Bot;
 
 namespace PlaneFX.Services
 {
-	public class UserService(PlaneFXContext context)
+	public class UserService(IConfiguration configuration, PlaneFXContext context)
 	{
+		public async Task<string> GetUserPhoto(long id)
+		{
+			var bot = new TelegramBotClient(configuration[StartupService.TG_API_TOKEN]!);
+			var photos = await bot.GetUserProfilePhotos(id, limit: 1);
+			var photo = await bot.GetFile(photos.Photos[0][0].FileId);
+			string filePath = string.Empty;
+
+			if (photo.FilePath != null)
+			{
+				int lastSlash = photo.FilePath.LastIndexOf('/');
+				string name = photo.FilePath.Remove(0, lastSlash);
+				string path = $"{Directory.GetCurrentDirectory()}/{photo.FilePath.Remove(lastSlash)}";
+				filePath = $"{path}{name}";
+
+				Directory.CreateDirectory(path);
+				await using var stream = File.Create(filePath);
+				await bot.DownloadFile(photo.FilePath, stream);
+			}
+			return filePath;
+		}
+
 		public async Task<User?> GetById(long id)
 			=> await context.Users.FindAsync(id);
 

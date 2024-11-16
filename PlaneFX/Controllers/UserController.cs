@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PlaneFX.DTOs;
 using PlaneFX.Enums;
 using PlaneFX.Filters;
@@ -29,6 +30,17 @@ namespace PlaneFX.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<User>> Get(long id)
 			=> await userService.GetById(id) is User user ? Ok(user) : NotFound();
+
+		[HttpGet("Photo/{id}")]
+		public async Task<IActionResult> GetPhoto(long id)
+		{
+			if (await userService.GetUserPhoto(id) is string path && !path.IsNullOrEmpty())
+			{
+				StreamContent stream = new(System.IO.File.OpenRead(path));
+				return File(await stream.ReadAsStreamAsync(), "application/octet-stream", $"{Guid.NewGuid()}");
+			}
+			return NotFound();
+		}
 
 		[HttpPost]
 		public async Task<ActionResult<User>> SignIn(UserDTO dTO)
