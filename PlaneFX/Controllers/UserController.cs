@@ -33,14 +33,11 @@ namespace PlaneFX.Controllers
 
 		[HttpGet("Photo/{id}")]
 		public async Task<IActionResult> GetPhoto(long id)
-		{
-			if (await userService.GetUserPhoto(id) is string path && !path.IsNullOrEmpty())
-			{
-				StreamContent stream = new(System.IO.File.OpenRead(path));
-				return File(await stream.ReadAsStreamAsync(), "application/octet-stream", $"{Guid.NewGuid()}");
-			}
-			return NotFound();
-		}
+			=> await userService.GetUserPhotoPath(id) is string path && !path.IsNullOrEmpty()
+				? File(await new StreamContent(System.IO.File.OpenRead(path)).ReadAsStreamAsync(),
+					"application/octet-stream",
+					$"{Guid.NewGuid()}")
+				: NotFound();
 
 		[HttpPost]
 		public async Task<ActionResult<User>> SignIn(UserDTO dTO)

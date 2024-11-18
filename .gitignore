@@ -1,5 +1,6 @@
 appsettings.Development.json
 bin
 obj
+photos
 .vscode
 .DS_Store

@@ -9,24 +9,23 @@ namespace PlaneFX.Services
 {
 	public class UserService(IConfiguration configuration, PlaneFXContext context)
 	{
-		public async Task<string> GetUserPhoto(long id)
+		public async Task<string?> GetUserPhotoPath(long id)
 		{
 			var bot = new TelegramBotClient(configuration[StartupService.TG_API_TOKEN]!);
 			var photos = await bot.GetUserProfilePhotos(id, limit: 1);
+
+			if (photos.TotalCount == 0)
+				return null;
+
 			var photo = await bot.GetFile(photos.Photos[0][0].FileId);
-			string filePath = string.Empty;
+			int lastSlash = photo.FilePath!.LastIndexOf('/');
+			string name = photo.FilePath.Remove(0, lastSlash);
+			string path = $"{Directory.GetCurrentDirectory()}/{photo.FilePath.Remove(lastSlash)}";
+			string filePath = $"{path}{name}";
 
-			if (photo.FilePath != null)
-			{
-				int lastSlash = photo.FilePath.LastIndexOf('/');
-				string name = photo.FilePath.Remove(0, lastSlash);
-				string path = $"{Directory.GetCurrentDirectory()}/{photo.FilePath.Remove(lastSlash)}";
-				filePath = $"{path}{name}";
-
-				Directory.CreateDirectory(path);
-				await using var stream = File.Create(filePath);
-				await bot.DownloadFile(photo.FilePath, stream);
-			}
+			Directory.CreateDirectory(path);
+			await using var stream = File.Create(filePath);
+			await bot.DownloadFile(photo.FilePath, stream);
 			return filePath;
 		}
 
