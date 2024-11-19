@@ -92,7 +92,13 @@ namespace PlaneFX
 			{
 				app.UseCors(o =>
 				{
-					o.WithOrigins("https://planefx.cloud/", "https://www.planefx.cloud/");
+					o.WithOrigins(
+						"https://planefx.cloud/",
+						"https://www.planefx.cloud/",
+						"https://t.me/",
+						"https://www.t.me/",
+						"https://cdn4-cdn-telegram.org/"
+					);
 					o.AllowAnyHeader();
 					o.AllowAnyMethod();
 				});
