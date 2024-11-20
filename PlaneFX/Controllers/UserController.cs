@@ -34,8 +34,8 @@ namespace PlaneFX.Controllers
 		[HttpGet("Photo/{url}")]
 		public async Task<IActionResult> GetPhoto(string url)
 		{
-			using var response = await new HttpClient().GetAsync(HttpUtility.UrlDecode(url));
-			return File(await response.Content.ReadAsStreamAsync(), "application/octet-stream");
+			var response = await new HttpClient().GetAsync(HttpUtility.UrlDecode(url));
+			return File(await response.Content.ReadAsStreamAsync(), "application/octet-stream", $"{Guid.NewGuid()}");
 		}
 
 		[HttpPost]
