@@ -32,8 +32,11 @@ namespace PlaneFX.Controllers
 			=> await userService.GetById(id) is User user ? Ok(user) : NotFound();
 
 		[HttpGet("Photo/{url}")]
-		public IActionResult GetPhoto(string url)
-			=> Redirect(HttpUtility.UrlDecode(url));
+		public async Task<IActionResult> GetPhoto(string url)
+		{
+			using var response = await new HttpClient().GetAsync(HttpUtility.UrlDecode(url));
+			return File(await response.Content.ReadAsStreamAsync(), "application/octet-stream");
+		}
 
 		[HttpPost]
 		public async Task<ActionResult<User>> SignIn(UserDTO dTO)
