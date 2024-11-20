@@ -1,5 +1,5 @@
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using PlaneFX.DTOs;
 using PlaneFX.Enums;
 using PlaneFX.Filters;
@@ -33,7 +33,7 @@ namespace PlaneFX.Controllers
 
 		[HttpGet("Photo/{url}")]
 		public IActionResult GetPhoto(string url)
-			=> Redirect(url);
+			=> Redirect(HttpUtility.UrlDecode(url));
 
 		[HttpPost]
 		public async Task<ActionResult<User>> SignIn(UserDTO dTO)
