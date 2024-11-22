@@ -8,7 +8,8 @@ using PlaneFX.Models;
 using PlaneFX.Services;
 using Serilog;
 using Serilog.Events;
-using Serilog.Sinks.Elasticsearch;
+using Serilog.Sinks.Grafana.Loki;
+using StackExchange.Redis;
 
 namespace PlaneFX
 {
@@ -20,14 +21,13 @@ namespace PlaneFX
 			var services = builder.Services;
 			var configuration = builder.Configuration;
 
-			_ = services.AddSerilog((logger) => logger
+			services.AddSerilog((logger) => logger
 				.MinimumLevel.Information()
 				.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
 				.MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Information)
 				.WriteTo.Console()
-				.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(
-					new Uri(configuration.GetConnectionString("Elastic")
-						?? throw new NullReferenceException()))));
+				.WriteTo.GrafanaLoki(configuration.GetConnectionString("Loki")
+					?? throw new NullReferenceException()));
 
 			services.AddControllers().AddJsonOptions(o =>
 			{
@@ -36,8 +36,13 @@ namespace PlaneFX
 			});
 			services.AddEndpointsApiExplorer();
 
-			services.AddDbContext<PlaneFXContext>();
+			services.AddHttpClient();
 			services.AddServices();
+			services.AddDbContext<PlaneFXContext>();
+			services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer
+				.Connect(configuration.GetConnectionString("Redis")
+					?? throw new NullReferenceException("Redis url not init")));
+
 
 			services.AddSwaggerGen(o =>
 			{
