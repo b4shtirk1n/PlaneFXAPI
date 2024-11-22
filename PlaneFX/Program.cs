@@ -36,7 +36,6 @@ namespace PlaneFX
 			});
 			services.AddEndpointsApiExplorer();
 
-			services.AddHttpClient();
 			services.AddServices();
 			services.AddDbContext<PlaneFXContext>();
 			services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer
