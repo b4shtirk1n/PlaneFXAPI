@@ -1,3 +1,5 @@
+using Testcontainers.Redis;
+
 namespace PlaneFX.Tests
 {
     public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
@@ -6,13 +8,19 @@ namespace PlaneFX.Tests
             .AddJsonFile("appsettings.json")
             .Build();
 
-        private readonly PostgreSqlContainer postgres = new PostgreSqlBuilder()
+        private static readonly PostgreSqlContainer postgres = new PostgreSqlBuilder()
             .WithImage("postgres:alpine")
+            .Build();
+
+        private static readonly RedisContainer redis = new RedisBuilder()
+            .WithImage("redis:alpine")
+            .DependsOn(postgres)
             .Build();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             configuration["ConnectionStrings:PlaneFX"] = postgres.GetConnectionString();
+            configuration["ConnectionStrings:Redis"] = redis.GetConnectionString();
             configuration[StartupService.TG_ID] = "123456789";
             configuration[StartupService.TG_USERNAME] = "cherkashh";
             configuration[StartupService.TIME_ZONE] = "5";
