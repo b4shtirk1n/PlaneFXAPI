@@ -8,6 +8,7 @@ using PlaneFX.Models;
 using PlaneFX.Services;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 
 namespace PlaneFX
 {
@@ -16,24 +17,29 @@ namespace PlaneFX
 		private static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+			var services = builder.Services;
+			var configuration = builder.Configuration;
 
-			builder.Services.AddSerilog((logger) => logger
+			_ = services.AddSerilog((logger) => logger
 				.MinimumLevel.Information()
 				.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
 				.MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Information)
-				.WriteTo.Console());
+				.WriteTo.Console()
+				.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(
+					new Uri(configuration.GetConnectionString("Elastic")
+						?? throw new NullReferenceException()))));
 
-			builder.Services.AddControllers().AddJsonOptions(o =>
+			services.AddControllers().AddJsonOptions(o =>
 			{
 				o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 				o.JsonSerializerOptions.WriteIndented = true;
 			});
-			builder.Services.AddEndpointsApiExplorer();
+			services.AddEndpointsApiExplorer();
 
-			builder.Services.AddDbContext<PlaneFXContext>();
-			builder.Services.AddServices();
+			services.AddDbContext<PlaneFXContext>();
+			services.AddServices();
 
-			builder.Services.AddSwaggerGen(o =>
+			services.AddSwaggerGen(o =>
 			{
 				o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
 				{
