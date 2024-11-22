@@ -38,27 +38,27 @@ namespace PlaneFX.Tests
         [Theory]
         [InlineData("")]
         [InlineData("test")]
-        public async Task MakeSU_BadTgId_ThrowFormat(string value)
+        public async Task MakeSU_BadTgId_ThrowInvalidOperation(string value)
         {
             configuration[StartupService.TG_ID] = value;
             configuration[StartupService.TG_USERNAME] = "cherkashh";
             configuration[StartupService.TIME_ZONE] = "5";
             configuration[StartupService.TG_API_TOKEN] = "ghfjkdy57494hf";
 
-            await Assert.ThrowsAsync<FormatException>(startup.MakeSU);
+            await Assert.ThrowsAsync<InvalidOperationException>(startup.MakeSU);
         }
 
         [Theory]
         [InlineData("")]
         [InlineData("test")]
-        public async Task MakeSU_BadTimeZone_ThrowFormat(string value)
+        public async Task MakeSU_BadTimeZone_ThrowInvalidOperation(string value)
         {
             configuration[StartupService.TG_ID] = "123456789";
             configuration[StartupService.TG_USERNAME] = "cherkashh";
             configuration[StartupService.TIME_ZONE] = value;
             configuration[StartupService.TG_API_TOKEN] = "ghfjkdy57494hf";
 
-            await Assert.ThrowsAsync<FormatException>(startup.MakeSU);
+            await Assert.ThrowsAsync<InvalidOperationException>(startup.MakeSU);
         }
     }
 }
