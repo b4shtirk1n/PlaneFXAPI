@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using PlaneFX.Interfaces;
 using PlaneFX.Services;
 
 namespace PlaneFX.Filters
 {
-	public class AuthFilter(UserService userService) : IAsyncAuthorizationFilter
+	public class AuthFilter(UserService userService) : IAsyncAuthorizationFilter, IService
 	{
 		public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
 		{

@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using PlaneFX.DTOs;
+using PlaneFX.Interfaces;
 using PlaneFX.Models;
 using PlaneFX.Responses;
 
 namespace PlaneFX.Services
 {
-	public class AccountService(PlaneFXContext context)
+	public class AccountService(PlaneFXContext context) : IService
 	{
 		public async Task<AccountResponse?> GetById(long id)
 		{

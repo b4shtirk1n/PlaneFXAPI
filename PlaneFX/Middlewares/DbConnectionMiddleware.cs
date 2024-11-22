@@ -1,8 +1,9 @@
+using PlaneFX.Interfaces;
 using PlaneFX.Models;
 
 namespace PlaneFX.Middlewares
 {
-	public class DbConnectionMiddleware(PlaneFXContext dbContext) : IMiddleware
+	public class DbConnectionMiddleware(PlaneFXContext dbContext) : IMiddleware, IService
 	{
 		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{

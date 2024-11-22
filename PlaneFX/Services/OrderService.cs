@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using PlaneFX.DTOs;
 using PlaneFX.Extensions;
+using PlaneFX.Interfaces;
 using PlaneFX.Models;
 using PlaneFX.Responses;
 
 namespace PlaneFX.Services
 {
-    public class OrderService(PlaneFXContext context)
+    public class OrderService(PlaneFXContext context) : IService
     {
         private const int TAKE = 10;
 

@@ -2,12 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using PlaneFX.DTOs;
 using PlaneFX.Enums;
 using PlaneFX.Helpers;
+using PlaneFX.Interfaces;
 using PlaneFX.Models;
 using Telegram.Bot;
 
 namespace PlaneFX.Services
 {
-	public class UserService(IConfiguration configuration, PlaneFXContext context)
+	public class UserService(IConfiguration configuration, PlaneFXContext context) : IService
 	{
 		public async Task<string?> GetUserPhotoPath(long id)
 		{

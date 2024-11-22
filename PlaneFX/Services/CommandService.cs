@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using PlaneFX.DTOs;
+using PlaneFX.Interfaces;
 using PlaneFX.Models;
 
 namespace PlaneFX.Services
 {
-    public class CommandService(PlaneFXContext context)
+    public class CommandService(PlaneFXContext context) : IService
     {
         public async Task<IEnumerable<Command>> GetUnComplete()
             => await context.Commands.AsNoTracking()
