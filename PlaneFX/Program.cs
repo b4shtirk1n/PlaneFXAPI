@@ -26,8 +26,7 @@ namespace PlaneFX
 				.MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Information)
 				.WriteTo.Console()
 				.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(
-					new Uri(configuration.GetConnectionString("Elastic")
-						?? throw new NullReferenceException()))));
+					new Uri(configuration.GetConnectionString("Elastic")!))));
 
 			services.AddControllers().AddJsonOptions(o =>
 			{
