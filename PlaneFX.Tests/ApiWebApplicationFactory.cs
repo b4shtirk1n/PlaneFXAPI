@@ -8,14 +8,21 @@ namespace PlaneFX.Tests
             .AddJsonFile("appsettings.json")
             .Build();
 
-        private static readonly PostgreSqlContainer postgres = new PostgreSqlBuilder()
-            .WithImage("postgres:alpine")
-            .Build();
+        private readonly PostgreSqlContainer postgres;
 
-        private static readonly RedisContainer redis = new RedisBuilder()
-            .WithImage("redis:alpine")
-            .DependsOn(postgres)
-            .Build();
+        private readonly RedisContainer redis;
+
+        public ApiWebApplicationFactory()
+        {
+            postgres = new PostgreSqlBuilder()
+                .WithImage("postgres:alpine")
+                .Build();
+
+            redis = new RedisBuilder()
+                .WithImage("redis:alpine")
+                .DependsOn(postgres)
+                .Build();
+        }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {

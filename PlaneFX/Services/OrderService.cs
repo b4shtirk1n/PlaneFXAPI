@@ -94,7 +94,7 @@ namespace PlaneFX.Services
                 string key = $"{nameof(Order)}:{accountId}";
                 await redis.StringSetAsync(key, JsonSerializer.Serialize(await orders), TimeSpan.FromHours(1));
             }
-            finally
+            catch
             {
             }
         }
