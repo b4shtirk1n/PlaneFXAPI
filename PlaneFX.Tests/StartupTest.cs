@@ -25,14 +25,14 @@ namespace PlaneFX.Tests
         }
 
         [Fact]
-        public async Task MakeSU_ConfigFillBad_ThrowFormat()
+        public async Task MakeSU_ConfigFillBad_ThrowInvalidOperation()
         {
             configuration[StartupService.TG_ID] = "test";
             configuration[StartupService.TG_USERNAME] = "cherkashh";
             configuration[StartupService.TIME_ZONE] = "test";
             configuration[StartupService.TG_API_TOKEN] = "ghfjkdy57494hf";
 
-            await Assert.ThrowsAsync<FormatException>(startup.MakeSU);
+            await Assert.ThrowsAsync<InvalidOperationException>(startup.MakeSU);
         }
 
         [Theory]

@@ -1,9 +1,8 @@
-using System.Text;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PlaneFX.Interfaces;
 using PlaneFX.Models;
 using PlaneFX.Requests;
+using Telegram.Bot;
 
 namespace PlaneFX.Services
 {
@@ -14,16 +13,10 @@ namespace PlaneFX.Services
 
         public async Task<string> CreateInvoice(InvoiceRequest invoice)
         {
-            using HttpClient client = new();
-            string json = JsonSerializer.Serialize(invoice);
-            var content = new StringContent(JsonSerializer.Serialize(invoice),
-                Encoding.UTF8, "application/json");
+            var client = new TelegramBotClient(configuration[StartupService.TG_API_TOKEN]!);
 
-            string token = configuration[StartupService.TG_API_TOKEN]!;
-            var response = await client.PostAsync($"https://api.telegram.org/{token}/createInvoiceLink",
-                content);
-
-            return await response.Content.ReadAsStringAsync();
+            return await client.CreateInvoiceLink(invoice.Title, invoice.Description,
+                invoice.Payload, invoice.Currency, [(invoice.Prices[0].Label, invoice.Prices[0].Amount)]);
         }
     }
 }
