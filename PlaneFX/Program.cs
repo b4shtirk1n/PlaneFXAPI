@@ -39,9 +39,14 @@ namespace PlaneFX
 			services.AddServices();
 			services.AddDbContext<PlaneFXContext>();
 			services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer
-				.Connect(configuration.GetConnectionString("Redis")
-					?? throw new NullReferenceException("Redis url not init")));
-
+				.Connect(new ConfigurationOptions
+				{
+					AbortOnConnectFail = false,
+					EndPoints =
+					{
+						configuration.GetConnectionString("Redis") ?? throw new NullReferenceException()
+					},
+				}));
 
 			services.AddSwaggerGen(o =>
 			{
