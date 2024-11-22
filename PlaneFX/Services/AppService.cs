@@ -11,15 +11,29 @@ namespace PlaneFX.Services
 
         public async Task<string?> GetTickers()
         {
+            string? cache = null;
             string key = $"{nameof(AppService)}";
-            string? cache = await redis.StringGetAsync(key);
+
+            try
+            {
+                cache = await redis.StringGetAsync(key);
+            }
+            catch
+            {
+            }
 
             if (cache == null)
             {
                 var res = await context.Services.AsNoTracking()
                     .FirstOrDefaultAsync();
 
-                await redis.StringSetAsync(key, res?.Tickers);
+                try
+                {
+                    await redis.StringSetAsync(key, res?.Tickers);
+                }
+                catch
+                {
+                }
                 return res?.Tickers;
             }
             return cache;

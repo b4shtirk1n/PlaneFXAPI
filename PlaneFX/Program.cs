@@ -42,6 +42,7 @@ namespace PlaneFX
 				.Connect(new ConfigurationOptions
 				{
 					AbortOnConnectFail = false,
+					ConnectRetry = 3,
 					EndPoints =
 					{
 						configuration.GetConnectionString("Redis") ?? throw new NullReferenceException()

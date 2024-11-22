@@ -27,18 +27,32 @@ namespace PlaneFX.Services
 
         public async Task<IEnumerable<ClosedOrder>> GetCloseOrders(long accountId)
         {
+            string? cache = null;
             string key = $"{nameof(Order)}:{accountId}";
-            string? cache = await redis.StringGetAsync(key);
+
+            try
+            {
+                cache = await redis.StringGetAsync(key);
+            }
+            catch
+            {
+            }
 
             if (string.IsNullOrEmpty(cache))
             {
-                var order = await context.ClosedOrders.AsNoTracking()
+                var orders = await context.ClosedOrders.AsNoTracking()
                     .Where(o => o.Account == accountId)
                     .OrderByDescending(o => o.TimeClosed)
                     .ToListAsync();
 
-                await redis.StringSetAsync(key, JsonSerializer.Serialize(order), TimeSpan.FromHours(1));
-                return order;
+                try
+                {
+                    await redis.StringSetAsync(key, JsonSerializer.Serialize(orders), TimeSpan.FromHours(1));
+                }
+                catch
+                {
+                }
+                return orders;
             }
             return JsonSerializer.Deserialize<IEnumerable<ClosedOrder>>(cache)!;
         }
@@ -73,6 +87,16 @@ namespace PlaneFX.Services
                 await CreateClose(closeOrderDTO, accountId);
 
             await context.SaveChangesAsync();
+
+            try
+            {
+                var orders = GetCloseOrders(accountId);
+                string key = $"{nameof(Order)}:{accountId}";
+                await redis.StringSetAsync(key, JsonSerializer.Serialize(await orders), TimeSpan.FromHours(1));
+            }
+            finally
+            {
+            }
         }
 
         private async Task CreateOpen(OpenedOrderDTO dTO, long accountId, long timeUpdate)

@@ -29,7 +29,7 @@ namespace PlaneFX.Services
 
 			try
 			{
-				await userService.GetAllByRole(RoleEnum.SU);
+				await userService.Get();
 			}
 			catch
 			{
