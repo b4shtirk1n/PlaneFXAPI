@@ -29,8 +29,16 @@ namespace PlaneFX.Tests
             builder.ConfigureAppConfiguration(c => c.AddConfiguration(configuration));
         }
 
-        public Task InitializeAsync() => postgres.StartAsync();
+        public async Task InitializeAsync()
+        {
+            await postgres.StartAsync();
+            await redis.StartAsync();
+        }
 
-        public new Task DisposeAsync() => postgres.StopAsync();
+        public new async Task DisposeAsync()
+        {
+            await postgres.StopAsync();
+            await redis.StopAsync();
+        }
     }
 }
