@@ -1,6 +1,8 @@
+using System.IO.Compression;
 using System.Net;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using PlaneFX.Extensions;
 using PlaneFX.Middlewares;
@@ -29,12 +31,23 @@ namespace PlaneFX
 				.WriteTo.GrafanaLoki(configuration.GetConnectionString("Loki")
 					?? throw new NullReferenceException()));
 
-			services.AddControllers().AddJsonOptions(o =>
-			{
-				o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-				o.JsonSerializerOptions.WriteIndented = true;
-			});
+			services.AddControllers()
+				.AddJsonOptions(o =>
+				{
+					o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+					o.JsonSerializerOptions.WriteIndented = true;
+				});
+
 			services.AddEndpointsApiExplorer();
+
+			builder.Services.Configure<GzipCompressionProviderOptions>(o =>
+				o.Level = CompressionLevel.SmallestSize);
+
+			builder.Services.AddResponseCompression(options =>
+			{
+				options.EnableForHttps = true;
+				options.Providers.Add<GzipCompressionProvider>();
+			});
 
 			services.AddServices();
 			services.AddDbContext<PlaneFXContext>();
@@ -79,6 +92,7 @@ namespace PlaneFX
 			var app = builder.Build();
 
 			app.UseSerilogRequestLogging();
+			app.UseResponseCompression();
 			app.UseSwagger();
 			app.UseSwaggerUI();
 
