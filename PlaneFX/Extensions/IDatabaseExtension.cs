@@ -20,11 +20,7 @@ namespace PlaneFX.Extensions
                 return await factory();
             }
             var data = await factory();
-
-            var transaction = redis.CreateTransaction();
-            await transaction.StringSetAsync(key, JsonSerializer.Serialize(data), expire ?? TimeSpan.FromMinutes(2));
-            transaction.Execute();
-
+            await redis.StringSetAsync(key, JsonSerializer.Serialize(data), expire ?? TimeSpan.FromMinutes(2));
             return data;
         }
     }
