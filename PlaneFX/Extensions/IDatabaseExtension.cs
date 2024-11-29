@@ -8,11 +8,17 @@ namespace PlaneFX.Extensions
         public static async Task<T> GetOrSetCacheAsync<T>(this IDatabase redis, string key,
             Func<Task<T>> factory, TimeSpan? expire = null)
         {
-            string? cache = await redis.StringGetAsync(key);
+            try
+            {
+                string? cache = await redis.StringGetAsync(key);
 
-            if (!string.IsNullOrEmpty(cache))
-                return JsonSerializer.Deserialize<T>(cache)!;
-
+                if (!string.IsNullOrEmpty(cache))
+                    return JsonSerializer.Deserialize<T>(cache)!;
+            }
+            catch
+            {
+                return await factory();
+            }
             var data = await factory();
             await redis.StringSetAsync(key, JsonSerializer.Serialize(data), expire);
             return data;
