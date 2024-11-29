@@ -66,7 +66,7 @@ namespace PlaneFX.Services
             {
                 var transaction = redis.CreateTransaction();
                 await transaction.KeyDeleteAsync($"{nameof(Order)}:{accountId}");
-                await transaction.ExecuteAsync();
+                transaction.Execute();
             }
         }
 
