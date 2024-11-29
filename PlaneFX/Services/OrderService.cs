@@ -57,14 +57,17 @@ namespace PlaneFX.Services
                     .Contains(o.Order))
                 .ToList();
 
+            foreach (var closeOrderDTO in unExistedOrders)
+                await CreateClose(closeOrderDTO, accountId);
+
+            await context.SaveChangesAsync();
+
             if (unExistedOrders.Count > 0)
             {
-                foreach (var closeOrderDTO in unExistedOrders)
-                    await CreateClose(closeOrderDTO, accountId);
-
-                await redis.KeyDeleteAsync($"{nameof(Order)}:{accountId}");
+                var transaction = redis.CreateTransaction();
+                await transaction.KeyDeleteAsync($"{nameof(Order)}:{accountId}");
+                await transaction.ExecuteAsync();
             }
-            await context.SaveChangesAsync();
         }
 
         private async Task CreateOpen(OpenedOrderDTO dTO, long accountId, long timeUpdate)
