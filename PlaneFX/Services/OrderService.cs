@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PlaneFX.DTOs;
 using PlaneFX.Extensions;
@@ -26,36 +25,11 @@ namespace PlaneFX.Services
                 .ToListAsync();
 
         public async Task<IEnumerable<ClosedOrder>> GetCloseOrders(long accountId)
-        {
-            string? cache = null;
-            string key = $"{nameof(Order)}:{accountId}";
-
-            try
-            {
-                cache = await redis.StringGetAsync(key);
-            }
-            catch
-            {
-            }
-
-            if (string.IsNullOrEmpty(cache))
-            {
-                var orders = await context.ClosedOrders.AsNoTracking()
+            => await redis.GetOrSetCacheAsync($"{nameof(Order)}:{accountId}", ()
+                => context.ClosedOrders.AsNoTracking()
                     .Where(o => o.Account == accountId)
                     .OrderByDescending(o => o.TimeClosed)
-                    .ToListAsync();
-
-                try
-                {
-                    await redis.StringSetAsync(key, JsonSerializer.Serialize(orders), TimeSpan.FromHours(1));
-                }
-                catch
-                {
-                }
-                return orders;
-            }
-            return JsonSerializer.Deserialize<IEnumerable<ClosedOrder>>(cache)!;
-        }
+                    .ToListAsync());
 
         public async Task<PaginationResponse<OpenedOrder>> GetOpenOrdersV2(long accountId, int page = 1)
             => await context.OpenedOrders.AsNoTracking()
@@ -87,16 +61,7 @@ namespace PlaneFX.Services
                 await CreateClose(closeOrderDTO, accountId);
 
             await context.SaveChangesAsync();
-
-            try
-            {
-                var orders = GetCloseOrders(accountId);
-                string key = $"{nameof(Order)}:{accountId}";
-                await redis.StringSetAsync(key, JsonSerializer.Serialize(await orders), TimeSpan.FromHours(1));
-            }
-            catch
-            {
-            }
+            await redis.KeyDeleteAsync($"{nameof(Order)}:{accountId}");
         }
 
         private async Task CreateOpen(OpenedOrderDTO dTO, long accountId, long timeUpdate)

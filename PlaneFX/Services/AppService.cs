@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PlaneFX.Extensions;
 using PlaneFX.Interfaces;
 using PlaneFX.Models;
 using StackExchange.Redis;
@@ -11,32 +12,10 @@ namespace PlaneFX.Services
 
         public async Task<string?> GetTickers()
         {
-            string? cache = null;
-            string key = $"{nameof(AppService)}";
+            var res = await redis.GetOrSetCacheAsync(nameof(AppService), () => context.Services.AsNoTracking()
+                .FirstOrDefaultAsync());
 
-            try
-            {
-                cache = await redis.StringGetAsync(key);
-            }
-            catch
-            {
-            }
-
-            if (cache == null)
-            {
-                var res = await context.Services.AsNoTracking()
-                    .FirstOrDefaultAsync();
-
-                try
-                {
-                    await redis.StringSetAsync(key, res?.Tickers);
-                }
-                catch
-                {
-                }
-                return res?.Tickers;
-            }
-            return cache;
+            return res?.Tickers;
         }
     }
 }
