@@ -64,9 +64,9 @@ namespace PlaneFX.Services
 
             if (unExistedOrders.Count > 0)
             {
-                var transaction = redis.CreateTransaction();
-                await transaction.KeyDeleteAsync($"{nameof(Order)}:{accountId}");
-                await transaction.ExecuteAsync();
+                // var transaction = redis.CreateTransaction();
+                await redis.KeyDeleteAsync($"{nameof(Order)}:{accountId}");
+                // await transaction.ExecuteAsync();
             }
         }
 
