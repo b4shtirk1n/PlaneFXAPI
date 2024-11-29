@@ -63,11 +63,7 @@ namespace PlaneFX.Services
             await context.SaveChangesAsync();
 
             if (unExistedOrders.Count > 0)
-            {
-                var transaction = redis.CreateTransaction();
-                await transaction.KeyDeleteAsync($"{nameof(Order)}:{accountId}");
-                transaction.Execute();
-            }
+                await redis.KeyDeleteAsync($"{nameof(Order)}:{accountId}");
         }
 
         private async Task CreateOpen(OpenedOrderDTO dTO, long accountId, long timeUpdate)
