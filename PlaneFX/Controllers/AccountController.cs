@@ -26,6 +26,15 @@ namespace PlaneFX.Controllers
 				? Ok(await accountService.Create(dTO))
 				: Conflict();
 
+		[HttpDelete("{number}")]
+		public async Task<IActionResult> Delete(long number)
+		{
+			if (await accountService.GetByNumber(number) != null)
+				await accountService.Remove(number);
+
+			return Ok();
+		}
+
 		[HttpGet]
 		public async Task<ActionResult<bool>> IsReferral(long id)
 			=> Ok(await accountService.IsReferral(id));
