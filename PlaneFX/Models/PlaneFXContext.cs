@@ -58,7 +58,7 @@ public partial class PlaneFXContext : DbContext
 
         modelBuilder.Entity<ClosedOrder>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("closed_orders_pkey");
+            entity.HasKey(e => e.Id).HasName("closed_orders_pk");
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 

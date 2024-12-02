@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace PlaneFX.Models;
 
 [Table("account")]
-[Index("Number", Name = "account_account_number_key", IsUnique = true)]
+[Index("Number", Name = "account_number_uindex", IsUnique = true)]
 public partial class Account
 {
     [Key]
