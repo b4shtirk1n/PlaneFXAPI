@@ -83,6 +83,17 @@ namespace PlaneFX.Services
 			return account;
 		}
 
+		public async Task Remove(long number)
+		{
+			if (await context.Accounts.FirstOrDefaultAsync(a => a.Number == number)
+				is not Account account)
+				return;
+
+			context.Accounts.Remove(account);
+			await context.SaveChangesAsync();
+			return;
+		}
+
 		private async Task<int> CountOpenOrders(long id)
 			=> await context.OpenedOrders.AsNoTracking()
 				.CountAsync(o => o.Account == id);
