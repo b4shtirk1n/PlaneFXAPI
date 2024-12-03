@@ -6,14 +6,15 @@ using PlaneFX.Responses;
 
 namespace PlaneFX.Services
 {
-	public class AccountService(PlaneFXContext context) : IService
+	public class AccountService(PlaneFXContext context, OrderService orderService) : IService
 	{
 		public async Task<AccountResponse?> GetById(long id)
 		{
 			if (await context.Accounts.FindAsync(id) is not Account account)
 				return null;
 
-			return new(account, await CountOpenOrders(account.Id));
+			return new(account, await CountOpenOrders(account.Id),
+				await orderService.GetProfitOdWeek(account.Id));
 		}
 
 		public async Task<AccountResponse?> GetByNumber(long number)
@@ -23,7 +24,8 @@ namespace PlaneFX.Services
 				is not Account account)
 				return null;
 
-			return new(account, await CountOpenOrders(account.Id));
+			return new(account, await CountOpenOrders(account.Id),
+				await orderService.GetProfitOdWeek(account.Id));
 		}
 
 		public async Task<IEnumerable<AccountResponse>> GetByUser(long id)
@@ -39,7 +41,7 @@ namespace PlaneFX.Services
 				int countOrders = await context.OpenedOrders.AsNoTracking()
 					.CountAsync(o => o.Account == account.Id);
 
-				res.Add(new(account, countOrders));
+				res.Add(new(account, countOrders, await orderService.GetProfitOdWeek(account.Id)));
 			}
 			return res;
 		}

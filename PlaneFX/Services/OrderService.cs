@@ -31,6 +31,21 @@ namespace PlaneFX.Services
                     .OrderByDescending(o => o.TimeClosed)
                     .ToListAsync());
 
+        public async Task<decimal> GetProfitOdWeek(long accountId)
+            => await redis.GetOrSetCacheAsync($"{nameof(DateTimeExtensions.StartOfWeek)}:{accountId}", async () =>
+                {
+                    decimal profitOfWeek = 0;
+                    var orders = await context.ClosedOrders.AsNoTracking()
+                        .Where(o => o.Account == accountId &&
+                            o.TimeClosed >= DateTime.Now.StartOfWeek(DayOfWeek.Monday))
+                        .ToListAsync();
+
+                    foreach (var order in orders)
+                        profitOfWeek += order.Profit + order.Swap + order.Commissions;
+
+                    return profitOfWeek;
+                });
+
         public async Task<PaginationResponse<OpenedOrder>> GetOpenOrdersV2(long accountId, int page = 1)
             => await context.OpenedOrders.AsNoTracking()
                 .Where(o => o.Account == accountId)
