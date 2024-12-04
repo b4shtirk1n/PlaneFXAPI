@@ -35,9 +35,12 @@ namespace PlaneFX.Services
             => await redis.GetOrSetCacheAsync($"{nameof(DateTimeExtensions.StartOfWeek)}:{accountId}", async () =>
                 {
                     decimal profitOfWeek = 0;
+                    DateTime startOfWeek = DateTime.Now
+                        .StartOfWeek(DayOfWeek.Monday)
+                        .ToUniversalTime();
+
                     var orders = await context.ClosedOrders.AsNoTracking()
-                        .Where(o => o.Account == accountId &&
-                            o.TimeClosed >= DateTime.Now.StartOfWeek(DayOfWeek.Monday))
+                        .Where(o => o.Account == accountId && o.TimeClosed >= startOfWeek)
                         .ToListAsync();
 
                     foreach (var order in orders)
