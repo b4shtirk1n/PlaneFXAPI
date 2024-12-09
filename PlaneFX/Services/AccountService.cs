@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using PlaneFX.DTOs;
 using PlaneFX.Interfaces;
@@ -73,6 +74,11 @@ namespace PlaneFX.Services
 				is not Account account)
 				return null;
 
+			decimal profitability = 1;
+
+			foreach (var order in await orderService.GetCloseOrders(account.Id))
+				profitability *= order.Profit / order.PriceOpened + 1;
+
 			account.Balance = dTO.Balance;
 			account.Drawdown = dTO.Drawdown;
 			account.MarginLevel = dTO.MarginLevel;
@@ -80,10 +86,15 @@ namespace PlaneFX.Services
 			account.ProfitToday = dTO.ProfitToday;
 			account.ProfitWeek = dTO.ProfitWeek;
 			account.ProfitYesterday = dTO.ProfitYesterday;
+			account.Profitability = (profitability - 1) * 100;
 
 			await context.SaveChangesAsync();
 			return account;
 		}
+
+		public async Task Rename(long id, string name)
+			=> await context.Accounts.Where(a => a.Id == id)
+				.ExecuteUpdateAsync(u => u.SetProperty(a => a.Name, name));
 
 		public async Task Remove(long number)
 		{
