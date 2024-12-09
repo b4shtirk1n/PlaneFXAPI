@@ -20,11 +20,22 @@ namespace PlaneFX.Controllers
 		public async Task<ActionResult<IEnumerable<AccountResponse>>> GetByUser(long id)
 			=> Ok(await accountService.GetByUser(id));
 
+		[HttpGet]
+		public async Task<ActionResult<bool>> IsReferral(long id)
+			=> Ok(await accountService.IsReferral(id));
+
 		[HttpPost]
 		public async Task<ActionResult<AccountResponse>> Create(AccountDTO dTO)
 		  	=> await accountService.IsExist(dTO)
 				? Ok(await accountService.Create(dTO))
 				: Conflict();
+
+		[HttpPatch]
+		public async Task<IActionResult> Rename(long id, string name)
+		{
+			await accountService.Rename(id, name);
+			return Ok();
+		}
 
 		[HttpDelete("{number}")]
 		public async Task<IActionResult> Delete(long number)
@@ -34,9 +45,5 @@ namespace PlaneFX.Controllers
 
 			return Ok();
 		}
-
-		[HttpGet]
-		public async Task<ActionResult<bool>> IsReferral(long id)
-			=> Ok(await accountService.IsReferral(id));
 	}
 }
