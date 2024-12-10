@@ -58,8 +58,8 @@ namespace PlaneFX.Controllers
             }
             try
             {
-                await orderService.Process(dTO, account.Account.Id);
                 await accountService.Update(dTO);
+                await orderService.Process(dTO, account.Account.Id);
 
                 return Ok(await commandService.GetUnComplete());
             }
