@@ -50,6 +50,7 @@ public partial class PlaneFXContext : DbContext
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
             entity.Property(e => e.Number).HasDefaultValueSql("'0'::bigint");
+            entity.Property(e => e.Profitability).HasDefaultValueSql("0");
 
             entity.HasOne(d => d.UserNavigation).WithMany(p => p.Accounts)
                 .OnDelete(DeleteBehavior.ClientSetNull)

@@ -57,7 +57,7 @@ public partial class Account
 
     [Column("profitability")]
     [Precision(10, 2)]
-    public decimal Profitability { get; set; }
+    public decimal? Profitability { get; set; }
 
     [InverseProperty("AccountNavigation")]
     public virtual ICollection<ClosedOrder> ClosedOrders { get; set; } = new List<ClosedOrder>();
