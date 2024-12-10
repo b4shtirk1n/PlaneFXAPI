@@ -1,6 +1,4 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlaneFX.DTOs;
 using PlaneFX.Models;
 using PlaneFX.Responses;
@@ -67,8 +65,6 @@ namespace PlaneFX.Controllers
             }
             catch (Exception ex)
             {
-                var DtoString = JsonSerializer.Serialize(dTO);
-                logger.LogInformation(DtoString);
                 logger.LogError(ex.Message);
                 return Conflict();
             }

@@ -75,10 +75,13 @@ namespace PlaneFX.Services
 				return null;
 
 			decimal profitability = 1;
+			decimal openedBalance = 0;
 
 			foreach (var order in await orderService.GetCloseOrders(account.Id))
-				profitability *= order.Profit / order.PriceOpened + 1;
-
+			{
+				openedBalance += order.Profit;
+				profitability *= order.Profit / openedBalance + 1;
+			}
 			account.Balance = dTO.Balance;
 			account.Drawdown = dTO.Drawdown;
 			account.MarginLevel = dTO.MarginLevel;
