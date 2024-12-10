@@ -63,9 +63,10 @@ namespace PlaneFX.Controllers
 
                 return Ok(await commandService.GetUnComplete());
             }
-            catch
+            catch (Exception ex)
             {
-                logger.LogError("Synchronization error");
+                logger.LogInformation(dTO.ToString());
+                logger.LogError(ex.Message);
                 return Conflict();
             }
         }
